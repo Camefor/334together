@@ -11,8 +11,8 @@ using Xhznl.HelloAbp.EntityFrameworkCore;
 namespace Xhznl.HelloAbp.Migrations
 {
     [DbContext(typeof(HelloAbpMigrationsDbContext))]
-    [Migration("20200923151414_Added_FileManagement")]
-    partial class Added_FileManagement
+    [Migration("20210702160213_Created_SongSheet_Entity")]
+    partial class Created_SongSheet_Entity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1976,6 +1976,72 @@ namespace Xhznl.HelloAbp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FileManagementFiles");
+                });
+
+            modelBuilder.Entity("Xhznl.HelloAbp.SongSheet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CommitTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DissName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Dissid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImgUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Introduction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ListenNum")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Score")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Version")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MusicSongSheet");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
