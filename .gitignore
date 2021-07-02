@@ -338,3 +338,7 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+Serve/Admin/aspnet-core/src/Xhznl.HelloAbp.EntityFrameworkCore.DbMigrations/Migrations/20210702154143_Created_SongSheet_Entity.Designer.cs
+Serve/Admin/aspnet-core/src/Xhznl.HelloAbp.EntityFrameworkCore.DbMigrations/Migrations/20210702154143_Created_SongSheet_Entity.cs
+Serve/Admin/aspnet-core/src/Xhznl.HelloAbp.EntityFrameworkCore.DbMigrations/Migrations/HelloAbpMigrationsDbContextModelSnapshot.cs
+Serve/Admin/aspnet-core/src/Xhznl.HelloAbp.EntityFrameworkCore.DbMigrations/Migrations/HelloAbpMigrationsDbContextModelSnapshot.cs

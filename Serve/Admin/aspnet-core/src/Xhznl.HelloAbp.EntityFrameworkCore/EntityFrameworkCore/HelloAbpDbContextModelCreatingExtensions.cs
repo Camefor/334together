@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Xhznl.HelloAbp.EntityFrameworkCore
 {
@@ -17,6 +18,15 @@ namespace Xhznl.HelloAbp.EntityFrameworkCore
             //    b.ConfigureByConvention(); //auto configure for the base class props
             //    //...
             //});
+
+            //将实体映射到数据库表
+            builder.Entity<SongSheet>(b =>
+            {
+                b.ToTable(HelloAbpConsts.DbTablePrefix + "SongSheet",
+                          HelloAbpConsts.DbSchema);
+                b.ConfigureByConvention(); //auto configure for the base class props
+                b.Property(x => x.Dissid).IsRequired().HasMaxLength(128);
+            });
         }
     }
 }

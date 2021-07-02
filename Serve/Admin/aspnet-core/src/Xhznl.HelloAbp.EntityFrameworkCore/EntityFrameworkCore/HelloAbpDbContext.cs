@@ -22,6 +22,10 @@ namespace Xhznl.HelloAbp.EntityFrameworkCore
     {
         public DbSet<AppUser> Users { get; set; }
 
+        //将实体添加到DbContext中
+        public DbSet<SongSheet> SongSheets { get; set; }
+
+
         /* Add DbSet properties for your Aggregate Roots / Entities here.
          * Also map them inside HelloAbpDbContextModelCreatingExtensions.ConfigureHelloAbp
          */
