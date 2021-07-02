@@ -26,19 +26,7 @@ namespace Xhznl.HelloAbp
         public double Version { get; set; }
 
 
-        //public string dissid { get; set; }
-
-        //public DateTime createtime { get; set; }
-
-        //public DateTime commit_time { get; set; }
-
-        //public string dissname { get; set; }
-
-        //public string imgurl { get; set; }
-        //public string introduction { get; set; }
-        //public string listennum { get; set; }
-        //public double score { get; set; }
-        //public double version { get; set; }
+      
 
     }
 }
