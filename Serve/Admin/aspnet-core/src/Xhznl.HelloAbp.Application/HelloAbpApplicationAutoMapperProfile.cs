@@ -2,6 +2,7 @@
 using Volo.Abp.AuditLogging;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
+using Xhznl.HelloAbp.Music;
 
 namespace Xhznl.HelloAbp
 {

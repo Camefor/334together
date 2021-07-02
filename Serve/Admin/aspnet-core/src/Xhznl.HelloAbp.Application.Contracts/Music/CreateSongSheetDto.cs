@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Xhznl.HelloAbp
+namespace Xhznl.HelloAbp.Music
 {
     public class CreateSongSheetDto
     {

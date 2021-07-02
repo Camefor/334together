@@ -8,7 +8,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 /// </summary>
 /// 
 
-namespace Xhznl.HelloAbp
+namespace Xhznl.HelloAbp.Music
 {
     /// <summary>
     /// http://localhost:8080/api/getSongSheetList?sin=0&ein=9
