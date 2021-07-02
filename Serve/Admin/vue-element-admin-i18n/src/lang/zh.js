@@ -1,6 +1,7 @@
 export default {
   route: {
     dashboard: '首页',
+    test: '测试',
     documentation: '文档',
     guide: '引导页',
     permission: '权限测试页',
@@ -107,6 +108,8 @@ export default {
     button: '打开引导'
   },
   components: {
+    test: '测试',
+
     documentation: '文档',
     tinymceTips: '富文本是管理后台一个核心的功能，但同时又是一个有很多坑的地方。在选择富文本的过程中我也走了不少的弯路，市面上常见的富文本都基本用过了，最终权衡了一下选择了Tinymce。更详细的富文本比较和介绍见',
     dropzoneTips: '由于我司业务有特殊需求，而且要传七牛 所以没用第三方，选择了自己封装。代码非常的简单，具体代码你可以在这里看到 @/components/Dropzone',
