@@ -12,17 +12,14 @@ namespace Xhznl.HelloAbp.Music
     /// </summary>
     public class SongSheetDto : AuditedEntityDto<Guid>
     {
-        public string dissid { get; set; }
-        public DateTime createtime { get; set; }
-
-        public DateTime commit_time { get; set; }
-
-        public string dissname { get; set; }
-
-        public string imgurl { get; set; }
-        public string introduction { get; set; }
-        public string listennum { get; set; }
-        public double score { get; set; }
-        public double version { get; set; }
+        public string Dissid { get; set; }
+        public DateTime CreateTime { get; set; }
+        public DateTime CommitTime { get; set; }
+        public string DissName { get; set; }
+        public string ImgUrl { get; set; }
+        public string Introduction { get; set; }
+        public string ListenNum { get; set; }
+        public double Score { get; set; }
+        public double Version { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using Xhznl.HelloAbp.Music;
 
 namespace Xhznl.HelloAbp.EntityFrameworkCore
 {
@@ -22,8 +23,9 @@ namespace Xhznl.HelloAbp.EntityFrameworkCore
             //将实体映射到数据库表
             builder.Entity<SongSheet>(b =>
             {
-                b.ToTable(HelloAbpConsts.DbTablePrefix + "SongSheet",
-                          HelloAbpConsts.DbSchema);
+
+                b.ToTable(HelloAbpConsts.DbTablePrefix + "SongSheets",
+                    HelloAbpConsts.DbSchema);
                 b.ConfigureByConvention(); //auto configure for the base class props
                 b.Property(x => x.Dissid).IsRequired().HasMaxLength(128);
             });

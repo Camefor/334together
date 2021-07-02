@@ -1976,7 +1976,7 @@ namespace Xhznl.HelloAbp.Migrations
                     b.ToTable("FileManagementFiles");
                 });
 
-            modelBuilder.Entity("Xhznl.HelloAbp.SongSheet", b =>
+            modelBuilder.Entity("Xhznl.HelloAbp.Music.SongSheet", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -2039,7 +2039,7 @@ namespace Xhznl.HelloAbp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MusicSongSheet");
+                    b.ToTable("MusicSongSheets");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>

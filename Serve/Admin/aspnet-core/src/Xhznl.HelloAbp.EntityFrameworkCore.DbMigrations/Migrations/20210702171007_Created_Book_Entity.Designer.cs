@@ -11,8 +11,8 @@ using Xhznl.HelloAbp.EntityFrameworkCore;
 namespace Xhznl.HelloAbp.Migrations
 {
     [DbContext(typeof(HelloAbpMigrationsDbContext))]
-    [Migration("20210702160213_Created_SongSheet_Entity")]
-    partial class Created_SongSheet_Entity
+    [Migration("20210702171007_Created_Book_Entity")]
+    partial class Created_Book_Entity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1978,7 +1978,7 @@ namespace Xhznl.HelloAbp.Migrations
                     b.ToTable("FileManagementFiles");
                 });
 
-            modelBuilder.Entity("Xhznl.HelloAbp.SongSheet", b =>
+            modelBuilder.Entity("Xhznl.HelloAbp.Music.SongSheet", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -2041,7 +2041,7 @@ namespace Xhznl.HelloAbp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MusicSongSheet");
+                    b.ToTable("MusicSongSheets");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>

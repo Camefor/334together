@@ -72,21 +72,28 @@ namespace Xhznl.HelloAbp
             //                 .ForMember(dest => dest.isdefault, opt => opt.MapFrom(f => f.Add_IsDefault))
             //                 ;
             //获取 SongSheet 歌单时使用
-            CreateMap<SongSheet, SongSheetDto>()
-                    .ForMember(dest => dest.dissid, opt => opt.MapFrom(f => f.Dissid))
-                    .ForMember(dest => dest.createtime, opt => opt.MapFrom(f => f.CreateTime))
-                    .ForMember(dest => dest.commit_time, opt => opt.MapFrom(f => f.CommitTime))
-                    .ForMember(dest => dest.dissname, opt => opt.MapFrom(f => f.DissName))
-                    .ForMember(dest => dest.imgurl, opt => opt.MapFrom(f => f.ImgUrl))
-                 ;
+            CreateMap<SongSheet, SongSheetDto>();
+
+
+            //CreateMap<SongSheet, SongSheetDto>()
+            //        .ForMember(dest => dest.dissid, opt => opt.MapFrom(f => f.Dissid))
+            //        .ForMember(dest => dest.createtime, opt => opt.MapFrom(f => f.CreateTime))
+            //        .ForMember(dest => dest.commit_time, opt => opt.MapFrom(f => f.CommitTime))
+            //        .ForMember(dest => dest.dissname, opt => opt.MapFrom(f => f.DissName))
+            //        .ForMember(dest => dest.imgurl, opt => opt.MapFrom(f => f.ImgUrl))
+            //     ;
 
             //创建 SongSheet 歌单时使用
-            CreateMap<CreateSongSheetDto, SongSheet>()
-              .ForMember(dest => dest.DissName, opt => opt.MapFrom(f => f.dissname))
-              .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(f => f.imgurl))
-              .ForMember(dest => dest.Introduction, opt => opt.MapFrom(f => f.introduction))
-              .ForMember(dest => dest.ListenNum, opt => opt.MapFrom(f => f.listennum))
-           ;
+            CreateMap<CreateUpdateSongSheetDto, SongSheet>();
+
+           // CreateMap<CreateUpdateSongSheetDto, SongSheet>()
+           //   .ForMember(dest => dest.DissName, opt => opt.MapFrom(f => f.dissname))
+           //   .ForMember(dest => dest.ImgUrl, opt => opt.MapFrom(f => f.imgurl))
+           //   .ForMember(dest => dest.Introduction, opt => opt.MapFrom(f => f.introduction))
+           //   .ForMember(dest => dest.ListenNum, opt => opt.MapFrom(f => f.listennum))
+           //   .ForMember(dest => dest.Score, opt => opt.MapFrom(f => f.score))
+           //   .ForMember(dest => dest.Version, opt => opt.MapFrom(f => f.version))
+           //;
 
         }
     }

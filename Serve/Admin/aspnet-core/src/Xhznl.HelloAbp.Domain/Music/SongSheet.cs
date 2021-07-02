@@ -26,7 +26,5 @@ namespace Xhznl.HelloAbp.Music
         public double Version { get; set; }
 
 
-      
-
     }
 }
