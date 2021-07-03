@@ -256,10 +256,21 @@ import playMode from "@/common/js/config";
 import { shuffle } from "@/common/js/util";
 import lyricParser from "lyric-parser";
 import { prefixStyle } from "@/config/dom";
+
+//添加signalr js库
+import * as signalR from "@microsoft/signalr";
+
 const filter = prefixStyle("filter");
 const transitionDuration = prefixStyle("transition-duration");
 const transform = prefixStyle("transform");
 const curRange = { radio: 96, range: 0 };
+
+//初始化signalR
+let token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6ImFkbWluIiwiSUQiOiIyIiwiZXhwIjoxNTk5NjM3NjIxLCJpc3MiOiJuZXRsb2NrIiwiYXVkIjoibmV0bG9ja3MifQ.9T1zw2LaCx4enZLj5RCfxhJ85a169NPMqmW0n5OlzgI";
+
+// let hubUrl = "http://localhost:44370/signalr-hubs/test";
+let hubUrl = "http://localhost:44370/hubs/listenTogether";
 
 export default {
   name: "",
@@ -280,6 +291,8 @@ export default {
       currentShow: "cd",
       songReady: false,
       showProgressBar: false,
+      connection: "",
+      isPlay: false,
     };
   },
   components: {
@@ -318,7 +331,9 @@ export default {
   created() {
     this.initialed = false;
     this.touch = { blur: 40 };
+    this.initSignalR();
   },
+
   mounted() {
     this.$nextTick(() => {
       // 获取mini进度条高度
@@ -369,7 +384,6 @@ export default {
       newHeight == 0 && this.lyricStop();
     },
     async currentSong(newSong, oldSong) {
-      debugger;
       if (this.__isEmptyObject(newSong)) {
         this.audio.src = "";
         return;
@@ -656,7 +670,6 @@ export default {
         });
     },
     play() {
-      debugger;
       if (!this.playing) {
         this.togglePlaying();
       }
@@ -671,6 +684,12 @@ export default {
       this.play();
 
       //todo:传递播放时间[this.audio.currentTime]信息给serve
+      var _obj = {
+        funcName: "onProgressChange",
+        actionType: "onProgressChange",
+        currentTime: this.audio.currentTime,
+      };
+      this.invokeSignalRServe(_obj);
     },
     resetStart() {
       this.currentTime = 0;
@@ -712,7 +731,6 @@ export default {
       }
     },
     onplaying() {
-      debugger;
       //正在播放的
       //todo:
       if (this.playing && !this.draging) {
@@ -803,7 +821,6 @@ export default {
     },
     loop() {
       // console.log('end loop')
-      debugger;
       this.songReady = false;
       this.resetStart();
       setTimeout(() => {
@@ -840,7 +857,6 @@ export default {
       this.songReady = true;
     },
     onerror() {
-      debugger;
       // console.log(this.audio.error, this.audio.networkState)
       if (this.audio.networkState === 3) {
         // this.audio.src = this.oldUrl
@@ -857,15 +873,24 @@ export default {
       this.oldIndex > this.currentIndex ? this.togglePrev() : this.toggleNext();
     },
     onpause() {
-      debugger;
       this.setPlayingState(false);
-
       //todo:传递歌曲暂停信号给serve
+      var _obj = {
+        funcName: "onpause",
+        actionType: "onpause",
+        isPlay: false,
+      };
+      this.invokeSignalRServe(_obj);
     },
     onplay() {
       this.setPlayingState(true);
-      debugger;
       //todo:传递歌曲开始播放信号给serve
+      var _obj = {
+        funcName: "onplay",
+        actionType: "onplay",
+        isPlay: true,
+      };
+      this.invokeSignalRServe(_obj);
     },
     oncanplaythrough() {
       this.play();
@@ -878,6 +903,67 @@ export default {
     },
     open() {
       this.setFullScreen(true);
+    },
+
+    initSignalR() {
+      var _this = this;
+      _this.connection = new signalR.HubConnectionBuilder()
+        .withUrl(hubUrl)
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+      //signalR接收Serve端的数据
+      _this.connection.on("SignalR_ReceiveData", function (data) {
+        var res = JSON.parse(data);
+        switch (res.actionType) {
+          case "onpause":
+            //不能调用外层  onpause 就是逻辑不要放一起，单一自责原则
+            _this.setPlayingState(false);
+            _this.lyricStop();
+            break;
+          case "onplay":
+            _this.setPlayingState(true);
+            break;
+          case "onProgressChange":
+            var currentTime = res.currentTime;
+            _this.draging = false;
+            _this.currentTime = currentTime;
+            _this.seek();
+            _this.isBuffered = _this.curRange.range > currentTime;
+            _this.audio.currentTime = currentTime;
+            _this.play();
+            break;
+        }
+      });
+
+      _this.connection.start().catch((err) => {
+        console.log(err);
+      });
+
+      //.net core 版本中默认不会自动重连，需手动调用 withAutomaticReconnect
+      // const connection = new signalR.HubConnectionBuilder()
+      //   .withAutomaticReconnect() //断线自动重连
+      //   .withUrl(hubUrl) //传递参数Query["access_token"]
+      //   .build();
+
+      //自动重连成功后的处理
+      // connection.onreconnected((connectionId) => {
+      //   debugger;
+      //   console.log(connectionId);
+      // });
+    },
+
+    /*调用后端方法 SignalR Serve 传入参数*/
+    invokeSignalRServe(object) {
+      var _this = this;
+      object.connectionId = _this.connection.connectionId;
+      object.val = true;
+      //object为对象类型,如果可用。再序列化为json 字符串。
+      //object对象其中要包括actionType属性，代表指令标识。 比如开始、暂停当前播放，切歌 等等
+      console.log(object);
+      _this.connection.invoke("SendMessage", JSON.stringify(object));
+      //当发起方已经完成相应指令后，serve无需再给发起方自己发送指令。或者发送指令，发起方这边不要再重复调用，否则会形成死循环
+      //解决方案：那就把Client的 “状态” 都给serve,让serve决定要不要下发指令
     },
   },
 };
