@@ -33,6 +33,7 @@ using Xhznl.HelloAbp.EntityFrameworkCore;
 using Xhznl.HelloAbp.Localization;
 using Xhznl.HelloAbp.MultiTenancy;
 using Volo.Abp.BlobStoring.FileSystem;
+using Volo.Abp.AspNetCore.SignalR;
 
 namespace Xhznl.HelloAbp
 {
@@ -46,7 +47,9 @@ namespace Xhznl.HelloAbp
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpBlobStoringFileSystemModule)
+        typeof(AbpBlobStoringFileSystemModule),
+            typeof(AbpAspNetCoreSignalRModule) //Add the new module dependency
+
     )]
     public class HelloAbpHttpApiHostModule : AbpModule
     {
