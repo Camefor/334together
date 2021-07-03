@@ -37,6 +37,8 @@ const SingerMv = () =>
   import(/* webpackChunkName: "singermv" */ '@/pages/singerDetail/children/mv.vue')
 const Search = () => import(/* webpackChunkName: "search" */ '@/pages/search')
 
+const Test = () => import(/* webpackChunkName: "search" */ '@/pages/test')
+
 Vue.use(Router)
 
 export default new Router({
@@ -125,5 +127,11 @@ export default new Router({
       component: Search,
       meta: { isHome: true, index: 3, fullScreenFixed: false, useSlide: true },
     },
+    {
+      path: '/test',
+      name: 'test',
+      component: Test
+    },
+    
   ],
 })
