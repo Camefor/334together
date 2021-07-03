@@ -24,6 +24,7 @@
     }
   },
   "dependencies": {
+    "@microsoft/signalr": "^5.0.7",
     "compression": "^1.7.4",
     "connect-history-api-fallback": "^1.6.0",
     "create-keyframe-animation": "^0.1.0",
