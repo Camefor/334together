@@ -18,11 +18,19 @@ let hubUrl = "http://localhost:44370/signalr-hubs/test";
 
 var connection = new signalR.HubConnectionBuilder().withUrl(hubUrl).build();
 
+//调用后端方法 SendMessageResponse 接收定时数据
+    connection.on("ReceiveMessage", function (data) {
+      console.log(data);
+    });
+
+
 //.net core 版本中默认不会自动重连，需手动调用 withAutomaticReconnect
 // const connection = new signalR.HubConnectionBuilder()
 //   .withAutomaticReconnect() //断线自动重连
 //   .withUrl(hubUrl) //传递参数Query["access_token"]
 //   .build();
+
+
 
 //启动
 connection.start().catch((err) => {
@@ -39,15 +47,8 @@ export default {
   mounted() {
     var _this = this;
 
-    //调用后端方法 SendMessageResponse 接收定时数据
-    connection.on("SendMessageResponse", function (data) {
-      console.log(data);
-    });
-
-    //调用后端方法 SendMessage 接受自己人发送消息
-    connection.on("SendMessage", function (data) {
-      console.log(data);
-    });
+    
+  
   },
   data() {
     return {

@@ -31,9 +31,13 @@ namespace Xhznl.HelloAbp
 
             var currentUserName = CurrentUser.UserName; //Access to the current user info
             var txt = L["MyText"]; //Localization
-            await Clients
-               .User("testid0001")
-               .SendAsync("ReceiveMessage", message);
+
+            //to do:
+            //下面的 “主动” 给客户端发消息就去参考api吧
+            //await Clients
+            //   .User("testid0001")
+            //   .SendAsync("ReceiveMessage", message);
+            await Clients.All.SendAsync("ReceiveMessage", message);
         }
     }
 }
