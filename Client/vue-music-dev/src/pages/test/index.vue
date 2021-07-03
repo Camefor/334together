@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-      <h3>hello world</h3>
+    <h3>hello world</h3>
     <div id="message" v-html="remsg"></div>
     <input type="text" placeholder="请输入用户名" v-model="user" />
     <input type="text" placeholder="请输入内容" v-model="msg" />
@@ -13,13 +13,16 @@ import * as signalR from "@microsoft/signalr";
 
 let token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6ImFkbWluIiwiSUQiOiIyIiwiZXhwIjoxNTk5NjM3NjIxLCJpc3MiOiJuZXRsb2NrIiwiYXVkIjoibmV0bG9ja3MifQ.9T1zw2LaCx4enZLj5RCfxhJ85a169NPMqmW0n5OlzgI";
-let hubUrl = "/signalr-hubs/test";
+  
+let hubUrl = "http://localhost:44370/signalr-hubs/test";
+
+var connection = new signalR.HubConnectionBuilder().withUrl(hubUrl).build();
 
 //.net core 版本中默认不会自动重连，需手动调用 withAutomaticReconnect
-const connection = new signalR.HubConnectionBuilder()
-  .withAutomaticReconnect() //断线自动重连
-  .withUrl(hubUrl) //传递参数Query["access_token"]
-  .build();
+// const connection = new signalR.HubConnectionBuilder()
+//   .withAutomaticReconnect() //断线自动重连
+//   .withUrl(hubUrl) //传递参数Query["access_token"]
+//   .build();
 
 //启动
 connection.start().catch((err) => {
@@ -38,21 +41,12 @@ export default {
 
     //调用后端方法 SendMessageResponse 接收定时数据
     connection.on("SendMessageResponse", function (data) {
-      if (data.state == 200)
-        _this.remsg = _this.remsg + "<br>" + "定时数据:" + data.msg;
+      console.log(data);
     });
 
     //调用后端方法 SendMessage 接受自己人发送消息
     connection.on("SendMessage", function (data) {
-      if (data.state == 200)
-        _this.remsg =
-          _this.remsg + "<br>" + data.data.userName + ":" + data.msg;
-    });
-
-    //调用后端方法 ConnectResponse 接收连接成功
-    connection.on("ConnectResponse", function (data) {
-      if (data.state == 200)
-        _this.remsg = _this.remsg + "<br>" + "连接:" + data.msg;
+      console.log(data);
     });
   },
   data() {
