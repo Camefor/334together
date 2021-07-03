@@ -2,9 +2,9 @@
   <div class="hello">
     <h3>hello world</h3>
     <div id="message" v-html="remsg"></div>
-    <input type="text" placeholder="请输入用户名" v-model="user" />
-    <input type="text" placeholder="请输入内容" v-model="msg" />
-    <button @click="handle">发送消息</button>
+    <input class="inputTxt" type="text" placeholder="请输入用户名" v-model="user" />
+    <input class="inputTxt" type="text" placeholder="请输入内容" v-model="msg" />
+    <button class="inputTxt" @click="handle">发送消息</button>
   </div>
 </template>
 
@@ -18,18 +18,12 @@ let hubUrl = "http://localhost:44370/signalr-hubs/test";
 
 var connection = new signalR.HubConnectionBuilder().withUrl(hubUrl).build();
 
-//调用后端方法 SendMessageResponse 接收定时数据
-    connection.on("ReceiveMessage", function (data) {
-      console.log(data);
-    });
-
 
 //.net core 版本中默认不会自动重连，需手动调用 withAutomaticReconnect
 // const connection = new signalR.HubConnectionBuilder()
 //   .withAutomaticReconnect() //断线自动重连
 //   .withUrl(hubUrl) //传递参数Query["access_token"]
 //   .build();
-
 
 
 //启动
@@ -39,6 +33,7 @@ connection.start().catch((err) => {
 
 //自动重连成功后的处理
 connection.onreconnected((connectionId) => {
+    debugger;
   console.log(connectionId);
 });
 
@@ -47,7 +42,11 @@ export default {
   mounted() {
     var _this = this;
 
-    
+    //调用后端方法 SendMessageResponse 接收定时数据
+    connection.on("ReceiveMessage", function (data) {
+      console.log(data);
+                _this.remsg = _this.remsg + "<br>" + "接收到的消息:" + data;
+    });
   
   },
   data() {
@@ -66,7 +65,7 @@ export default {
       }
       //调用后端方法 SendMessage 传入参数
       connection.invoke("SendMessage", this.user, this.msg);
-      this.msg = "";
+    //   this.msg = "";
     },
   },
 };
@@ -78,6 +77,10 @@ export default {
   overflow-y: auto;
   text-align: left;
   border: #42b983 solid 1px;
-  height: 500px;
+  height: 200px;
+}
+.inputTxt{
+    height:40px;
+    width: 100px;
 }
 </style>
