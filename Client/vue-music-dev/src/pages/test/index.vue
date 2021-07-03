@@ -14,7 +14,8 @@ import * as signalR from "@microsoft/signalr";
 let token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6ImFkbWluIiwiSUQiOiIyIiwiZXhwIjoxNTk5NjM3NjIxLCJpc3MiOiJuZXRsb2NrIiwiYXVkIjoibmV0bG9ja3MifQ.9T1zw2LaCx4enZLj5RCfxhJ85a169NPMqmW0n5OlzgI";
   
-let hubUrl = "http://localhost:44370/signalr-hubs/test";
+// let hubUrl = "http://localhost:44370/signalr-hubs/test";
+let hubUrl = "http://localhost:44370/hubs/my-test-hub";
 
 var connection = new signalR.HubConnectionBuilder().withUrl(hubUrl).build();
 

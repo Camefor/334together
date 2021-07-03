@@ -11,7 +11,7 @@ using Volo.Abp.Identity;
 
 namespace Xhznl.HelloAbp
 {
-    //[HubRoute("/my-test-hub")]
+    [HubRoute("/hubs/my-test-hub")]
     //默认路由:/signalr-hubs/test
     public class TestHub : AbpHub
     {
