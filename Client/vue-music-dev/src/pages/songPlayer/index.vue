@@ -354,7 +354,7 @@ export default {
       this.oldIndex = oldIndex;
     },
     playing() {
-      debugger;
+      // debugger;
       if (!this.songReady) {
         return;
       }
@@ -384,7 +384,7 @@ export default {
       newHeight == 0 && this.lyricStop();
     },
     async currentSong(newSong, oldSong) {
-      debugger;
+      // debugger;
 
       if (this.__isEmptyObject(newSong)) {
         this.audio.src = "";
@@ -406,13 +406,13 @@ export default {
       // 重置
       this.resetStart();
 
-      //todo:传递切换音乐信号给serve，歌曲相同。
-      var _obj = {
-        funcName: "currentSong",
-        actionType: "currentSong",
-        newSong: newSong,
-      };
-      this.invokeSignalRServe(_obj);
+      // //todo:传递切换音乐信号给serve，歌曲相同。
+      // var _obj = {
+      //   funcName: "currentSong",
+      //   actionType: "currentSong",
+      //   newSong: newSong,
+      // };
+      // this.invokeSignalRServe(_obj);
     },
   },
   methods: {
@@ -421,7 +421,7 @@ export default {
       setPlayingState: "SET_PLAYING_STATE",
       setMiniPlayerHeight: "SET_MINI_PLAYER_HEIGHT",
     }),
-    ...playerControls,
+    ...playerControls, //这里面都是封装的方法
     onToggleRadio({ value: radio }) {
       debugger;
       const selectItem = { range: 0, radio };
@@ -678,7 +678,7 @@ export default {
         });
     },
     play() {
-      debugger;
+      // debugger;
       if (!this.playing) {
         this.togglePlaying();
       }
@@ -937,17 +937,17 @@ export default {
       _this.connection.on("SignalR_ReceiveData", function (data) {
         var res = JSON.parse(data);
         switch (res.actionType) {
-          case "onpause"://暂停指令
+          case "onpause": //暂停指令
             //不能调用外层 把  方法 onpause 里的拿出来调用
             _this.setPlayingState(false);
             _this.lyricStop();
             break;
 
-          case "onplay"://播放指令
+          case "onplay": //播放指令
             _this.setPlayingState(true);
             break;
 
-          case "onProgressChange"://改变播放进度指令
+          case "onProgressChange": //改变播放进度指令
             var currentTime = res.currentTime;
             _this.draging = false;
             _this.currentTime = currentTime;
@@ -957,59 +957,28 @@ export default {
             _this.play();
             break;
 
-          case "currentSong"://切歌指令
-            debugger;
-            var newSong = res.newSong;
-            //流程： currentSong（）=>  playing() => playing() =>play() => play()
-            _this.myTest();
-            // _this.currentSong(newSong, {});
-            // _this.playing();
-            // _this.play();
-            // if (_this.__isEmptyObject(currentSong)) {
-            //   _this.audio.src = "";
-            //   return;
-            // }
-            // if (_this.$refs.progress) {
-            //   _this.$refs.progress.transition = "all .2s";
-            // }
+          case "togglePrev": //切歌指令(上一首)。要确保播放列表也同步一致,歌曲索引一致
+            if (!_this.songReady) {
+              return;
+            }
+            let prevIndex = _this.currentIndex - 1;
+            if (prevIndex == -1) {
+              prevIndex = _this.playlist.length - 1;
+            }
+            _this.setCurrentIndex(prevIndex);
+            _this.songReady = false;
+            break;
 
-            // // const selectItem = { range: 0, radio };
-
-            // _this.oldUrl = _this.audio.src;
-            // // this.oldRadio = this.radio;
-            // // _this.curRange = selectItem;
-            // _this.audio.src = currentSong.url;
-            // _this.audio.currentTime = _this.currentTime;
-
-            // 获取歌词
-
-            // this.radio = 96;
-            // _this.curRange = { radio: 96, range: 0 }; //缓冲进度置零
-            // _this.currentLyric && _this.currentLyric.stop();
-            // _this.currentLyric = null;
-
-            // // _this.getLyric();
-            // var lyric = "",
-            //   param = { id: currentSong.id };
-            // lyric =  _this.currentSong.getLyric();
-            // _this.currentLyric = new lyricParser(lyric, _this.handleLyric);
-
-            // if (_this.currentLyric.lines.length > 0) {
-            //   _this.curLyric = _this.currentLyric.lines[_this.curLine].txt;
-            //   _this.songReady && _this.currentLyric.play();
-            // } else if (lyric.split("\n").length > 2) {
-            //   _this.currentLyric.lines = lyric
-            //     .split("\n")
-            //     .map((txt) => ({ txt }));
-            //   _this.$nextTick(() => {
-            //     _this.lyricStop();
-            //     _this.curLine = -1;
-            //   });
-            // }
-
-            // 重置
-            // _this.resetStart();
-
+          case "toggleNext": //切歌指令(下一首)。要确保播放列表也同步一致,歌曲索引一致
+            if (!_this.songReady) {
+              return;
+            }
+            let nextIndex = _this.currentIndex + 1;
+            if (nextIndex == _this.playlist.length) {
+              nextIndex = 0;
+            }
+            _this.setCurrentIndex(nextIndex);
+            _this.songReady = false;
             break;
         }
       });
@@ -1017,8 +986,6 @@ export default {
       _this.connection.start().catch((err) => {
         console.log(err);
       });
-
-      
     },
 
     /*调用后端方法 SignalR Serve 传入参数*/
