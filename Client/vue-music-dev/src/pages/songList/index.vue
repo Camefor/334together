@@ -38,7 +38,7 @@
           :marginTop="20"
           v-if="musicList.length"
           :list="musicList"
-          @notice="_receiveSon"
+          @selectPlayForIndex="selectPlayForIndex"
         ></music-list>
       </cube-scroll>
     </div>
@@ -78,7 +78,7 @@ export default {
     });
   },
   methods: {
-    _receiveSon(list, index) {
+    selectPlayForIndex(list,index) {
       console.log(list);
       console.log(index);
     },
