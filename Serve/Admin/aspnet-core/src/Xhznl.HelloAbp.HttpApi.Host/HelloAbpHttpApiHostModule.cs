@@ -34,6 +34,7 @@ using Xhznl.HelloAbp.Localization;
 using Xhznl.HelloAbp.MultiTenancy;
 using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.AspNetCore.SignalR;
+using Xhznl.HelloAbp.SignalR;
 
 namespace Xhznl.HelloAbp
 {
@@ -90,6 +91,28 @@ namespace Xhznl.HelloAbp
                 //if set true will return details to client
                 options.SendExceptionsDetailsToClients = false;
             });
+
+            //如果你不想禁用自动集线器map,但仍想执行其他SignalR配置,可以使用 options.Hubs.AddOrUpdate(...) 方法:
+            Configure<AbpSignalROptions>(options =>
+            {
+                options.Hubs.AddOrUpdate(
+                    typeof(ListenTogetherHub), //Hub type
+                    config => //Additional configuration
+        {
+            config.RoutePattern = "/hubs/listenTogether"; //override the default route
+            config.ConfigureActions.Add(hubOptions =>
+                        {
+                            //Additional options
+                            hubOptions.LongPolling.PollTimeout = TimeSpan.FromSeconds(50);
+                            hubOptions.ApplicationMaxBufferSize = 50000000;
+                            hubOptions.TransportMaxBufferSize = 500000000;
+
+                        });
+        }
+                );
+            });
+
+
         }
         private void ConfigureUrls(IConfiguration configuration)
         {
@@ -175,8 +198,7 @@ namespace Xhznl.HelloAbp
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
                     options.ApiName = "HelloAbp";
-                    options.JwtBackChannelHandler = new HttpClientHandler()
-                    {
+                    options.JwtBackChannelHandler = new HttpClientHandler() {
                         ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                     };
                 });
@@ -205,8 +227,7 @@ namespace Xhznl.HelloAbp
                             Array.Empty<string>()
                         }
                     });
-                    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme()
-                    {
+                    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme() {
                         Name = "Authorization",
                         In = ParameterLocation.Header,
                         Type = SecuritySchemeType.ApiKey

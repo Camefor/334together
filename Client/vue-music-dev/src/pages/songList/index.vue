@@ -45,6 +45,14 @@
   </div>
 </template>
 <script type="text/javascript">
+import { mapActions } from "vuex";
+
+//添加signalr js库
+import * as signalR from "@microsoft/signalr";
+
+//初始化signalR
+let hubUrl = "http://localhost:44370/hubs/listenTogether";
+
 export default {
   name: "songList",
 
@@ -62,12 +70,14 @@ export default {
       scrollY: 0,
       picHeight: 0,
       reserved: 0,
+      connection: "", //signalR的连接对象
     };
   },
   props: ["mid"],
   created() {
     this.cd = {};
     this.getSongList();
+    this.initSignalR();
   },
   mounted() {
     this.reserved = $(".mt-header").height();
@@ -78,9 +88,18 @@ export default {
     });
   },
   methods: {
-    selectPlayForIndex(list,index) {
-      console.log(list);
-      console.log(index);
+    ...mapActions(["selectPlay"]),
+
+    selectPlayForIndex(list, index) {
+      //todo:首次点击 加载 歌单列表后 传递歌曲列表和点击索引给serve
+      var _obj = {
+        funcName: "selectPlay",
+        actionType: "selectPlay",
+        list: list,
+        index: index,
+      };
+      //web socket 长度限制
+      this.invokeSignalRServe(_obj);
     },
     onScroll({ x, y }) {
       this.scrollY = y;
@@ -155,6 +174,51 @@ export default {
       this.musicList = songlist.map((item) => {
         return new this.__Song(item);
       });
+    },
+    initSignalR() {
+      var _this = this;
+      _this.connection = new signalR.HubConnectionBuilder()
+        .withUrl(hubUrl)
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+      //signalR接收Serve端的数据
+      _this.connection.on("SignalR_ReceiveData", function (data) {
+        var res = JSON.parse(data);
+        switch (res.actionType) {
+          case "selectPlay": //
+          console.log(res);
+            var _list = _this.__cloneDeep__(res.list);
+            var _index = res.index;
+            //初始化播放列表
+            _this.selectPlay({ list: _list, _index });
+            try {
+            } catch (error) {
+              console.log(error);
+            }
+
+            break;
+        }
+      });
+
+      _this.connection.start().catch((err) => {
+        console.log(err);
+      });
+    },
+
+    /*调用后端方法 SignalR Serve 传入参数*/
+    invokeSignalRServe(object) {
+      var _this = this;
+      object.connectionId = _this.connection.connectionId;
+      object.val = true;
+      //object为对象类型,如果可用。再序列化为json 字符串。
+      //object对象其中要包括actionType属性，代表指令标识。 比如开始、暂停当前播放，切歌 等等
+      var jsonPar = JSON.stringify(object);
+      console.log(object);
+      console.log(jsonPar);
+      _this.connection.invoke("SendMessage", jsonPar);
+      //当发起方已经完成相应指令后，serve无需再给发起方自己发送指令。或者发送指令，发起方这边不要再重复调用，否则会形成死循环
+      //解决方案：那就把Client的 “状态” 都给serve,让serve决定要不要下发指令
     },
   },
 };

@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.SignalR;
+using Volo.Abp.DependencyInjection;
 using Xhznl.HelloAbp.Infrastructure.Extensions;
 using Xhznl.HelloAbp.Music;
 
 namespace Xhznl.HelloAbp.SignalR
 {
+    //[DisableConventionalRegistration]//如果想要禁用集线器类自动添加依赖注入
     [HubRoute("/hubs/listenTogether")]
     public class ListenTogetherHub : AbpHub
     {
