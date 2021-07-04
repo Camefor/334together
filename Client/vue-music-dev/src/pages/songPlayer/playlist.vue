@@ -5,9 +5,9 @@
         <div class="list-head flex YCenter">
           <div class="playmode-wrapper flex YCenter">
             <p @click="changeMode" class="mode flex Center">
-              <i :class="[modeCls,'iconfont']"></i>
+              <i :class="[modeCls, 'iconfont']"></i>
             </p>
-            <p class="mode-text">{{modeText}}</p>
+            <p class="mode-text">{{ modeText }}</p>
           </div>
           <div @click="clearList" class="clear-wrapper">
             <i class="cubeic-delete clear"></i>
@@ -23,16 +23,20 @@
           <transition-group name="list" tag="ul">
             <li
               ref="songItem"
-              @click="playItem(item,index)"
-              :class="['song-item', 'flex',{current:currentSong.id===item.id}]"
-              v-for="(item,index) in sequenceList"
+              @click="playItem(item, index)"
+              :class="[
+                'song-item',
+                'flex',
+                { current: currentSong.id === item.id },
+              ]"
+              v-for="(item, index) in sequenceList"
               :key="item.id"
             >
               <div class="index-wrapper">
-                <p class="text">{{index+1}}</p>
+                <p class="text">{{ index + 1 }}</p>
               </div>
               <div class="name-wrapper">
-                <p class="name ellipsis">{{item.name}}</p>
+                <p class="name ellipsis">{{ item.name }}</p>
               </div>
               <div @click.stop="deleteOne(item)" class="delete-wrapper">
                 <i class="cubeic-close"></i>
@@ -49,97 +53,167 @@
   </transition>
 </template>
 <script type="text/javascript">
-import { mapGetters, mapMutations, mapActions } from 'vuex'
-import mixin from './mixin.js'
-import playMode from '@/common/js/config'
+import { mapGetters, mapMutations, mapActions } from "vuex";
+import mixin from "./mixin.js";
+import playMode from "@/common/js/config";
+// import signalRMusic from "@/common/js/signalRMusic";
+import * as signalR from "@microsoft/signalr";
+//初始化signalR
+let token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6ImFkbWluIiwiSUQiOiIyIiwiZXhwIjoxNTk5NjM3NjIxLCJpc3MiOiJuZXRsb2NrIiwiYXVkIjoibmV0bG9ja3MifQ.9T1zw2LaCx4enZLj5RCfxhJ85a169NPMqmW0n5OlzgI";
+
+// let hubUrl = "http://localhost:44370/signalr-hubs/test";
+let hubUrl = "http://localhost:44370/hubs/listenTogether";
+
 export default {
-  name: '',
+  name: "",
   mixins: [mixin],
   props: {
     playlist1: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
-      showFlag: false
-    }
+      showFlag: false,
+      connection: "", //signalR的连接对象
+    };
   },
   computed: {
     wrapperStyle() {
       return {
-        maxHeight: window.innerHeight / 1.6 + 'px'
-      }
+        maxHeight: window.innerHeight / 1.6 + "px",
+      };
     },
     modeText() {
       return this.mode === playMode.loop
-        ? '循环播放'
+        ? "循环播放"
         : this.mode === playMode.random
-        ? '随机播放'
-        : '顺序播放'
-    }
+        ? "随机播放"
+        : "顺序播放";
+    },
+  },
+  created() {
+    this.initSignalR(); //初始化
   },
   methods: {
     ...mapMutations({
-      setCurrentIndex: 'SET_CURRENT_INDEX'
+      setCurrentIndex: "SET_CURRENT_INDEX",
     }),
-    ...mapActions(['deleteSong', 'deleteSongList']),
-
+    ...mapActions(["deleteSong", "deleteSongList"]),
+    // ...signalRMusic,
     hide() {
-      this.showFlag = false
+      this.showFlag = false;
     },
     show() {
-      this.showFlag = true
+      this.showFlag = true;
 
       this.$nextTick(() => {
-        this.$refs.listContent.refresh()
-        this.scrollToCurrent()
-      })
+        this.$refs.listContent.refresh();
+        this.scrollToCurrent();
+      });
     },
     clearList() {
-      debugger;
-
+      // var _this = this;
       try {
-        this.MessageBox.confirm('确定清空列表?').then(action => {
-          this.deleteSongList()
-          this.hide()
-        })
+        this.MessageBox.confirm("确定清空列表?").then((action) => {
+          this.deleteSongList();
+          this.hide();
+
+          //todo:传递切换 清空列表【播放列表，不是该歌单歌曲】 信号给serve，歌曲相同。
+          var _obj = {
+            funcName: "clearList",
+            actionType: "clearList",
+          };
+          this.invokeSignalRServe(_obj);
+        });
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     },
     deleteOne(item) {
-      debugger;
-      this.deleteSong(item)
+      this.deleteSong(item);
       if (!this.playlist.length) {
-        this.hide()
+        this.hide();
       }
     },
     playItem(item, index) {
-      debugger;
-
       if (this.mode === playMode.random) {
-        index = this.playlist.findIndex(song => item.id === song.id)
+        index = this.playlist.findIndex((song) => item.id === song.id);
       }
-      this.setCurrentIndex(index)
+      this.setCurrentIndex(index);
     },
     scrollToCurrent() {
       const index = this.sequenceList.findIndex(
-        item => item.id === this.currentSong.id
-      )
-      this.$refs.listContent.scrollToElement(this.$refs.songItem[index], 300)
-    }
+        (item) => item.id === this.currentSong.id
+      );
+      this.$refs.listContent.scrollToElement(this.$refs.songItem[index], 300);
+    },
+
+    initSignalR() {
+      var _this = this;
+      _this.connection = new signalR.HubConnectionBuilder()
+        .withUrl(hubUrl)
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+      //.net core 版本中默认不会自动重连，需手动调用 withAutomaticReconnect
+      // const connection = new signalR.HubConnectionBuilder()
+      //   .withAutomaticReconnect() //断线自动重连
+      //   .withUrl(hubUrl) //传递参数Query["access_token"]
+      //   .build();
+
+      //自动重连成功后的处理
+      // connection.onreconnected((connectionId) => {
+      //   debugger;
+      //   console.log(connectionId);
+      // });
+
+      //signalR接收Serve端的数据
+      _this.connection.on("SignalR_ReceiveData", function (data) {
+        var res = JSON.parse(data);
+        switch (res.actionType) {
+          case "clearList": //切歌指令(下一首)。要确保播放列表也同步一致,歌曲索引一致
+            try {
+              _this.deleteSongList();
+              _this.hide();
+            } catch (err) {
+              console.log(err);
+            }
+            break;
+        }
+      });
+
+      _this.connection.start().catch((err) => {
+        console.log(err);
+      });
+    },
+
+    /*调用后端方法 SignalR Serve 传入参数*/
+    invokeSignalRServe(object) {
+      var _this = this;
+      object.connectionId = _this.connection.connectionId;
+      object.val = true;
+      //object为对象类型,如果可用。再序列化为json 字符串。
+      //object对象其中要包括actionType属性，代表指令标识。 比如开始、暂停当前播放，切歌 等等
+      var jsonPar = JSON.stringify(object);
+      console.log(object);
+      console.log(jsonPar);
+      _this.connection.invoke("SendMessage", jsonPar);
+      //当发起方已经完成相应指令后，serve无需再给发起方自己发送指令。或者发送指令，发起方这边不要再重复调用，否则会形成死循环
+      //解决方案：那就把Client的 “状态” 都给serve,让serve决定要不要下发指令
+    },
   },
   watch: {
     currentSong(newSong, oldSong) {
       if (newSong.id === oldSong.id || newSong.id === undefined) {
-        return
+        return;
       }
-      this.$nextTick(this.scrollToCurrent)
-    }
-  }
-}
+      this.$nextTick(this.scrollToCurrent);
+    },
+  },
+};
 </script>
 <style scoped lang="less">
 .list-leave-to {
