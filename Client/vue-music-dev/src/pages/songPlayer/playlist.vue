@@ -98,6 +98,8 @@ export default {
       })
     },
     clearList() {
+      debugger;
+
       try {
         this.MessageBox.confirm('确定清空列表?').then(action => {
           this.deleteSongList()
@@ -108,12 +110,15 @@ export default {
       }
     },
     deleteOne(item) {
+      debugger;
       this.deleteSong(item)
       if (!this.playlist.length) {
         this.hide()
       }
     },
     playItem(item, index) {
+      debugger;
+
       if (this.mode === playMode.random) {
         index = this.playlist.findIndex(song => item.id === song.id)
       }
