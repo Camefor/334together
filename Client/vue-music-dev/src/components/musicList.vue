@@ -54,6 +54,9 @@ export default {
     async selectItem(item, index) {
     
       this.selectPlay({ list: this.__cloneDeep__(this.list), index })
+
+          this.$emit('notice', this.__cloneDeep__(this.list),index)
+
     }
   }
 }

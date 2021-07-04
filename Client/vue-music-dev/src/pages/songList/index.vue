@@ -1,18 +1,24 @@
 <template>
   <div>
     <my-loading v-if="loading"></my-loading>
-    <div class="no-data-wrap" v-if="!loading && musicList.length===0">
+    <div class="no-data-wrap" v-if="!loading && musicList.length === 0">
       <span class="text">暂无数据</span>
     </div>
     <div>
       <!-- 顶部导航 -->
-      <mt-header class="mt-header" fixed :title="$route.query.dissname || $route.query.name">
-        <mt-button @click="$router.back()" slot="left" icon="back">返回</mt-button>
+      <mt-header
+        class="mt-header"
+        fixed
+        :title="$route.query.dissname || $route.query.name"
+      >
+        <mt-button @click="$router.back()" slot="left" icon="back"
+          >返回</mt-button
+        >
         <mt-button icon="more" slot="right"></mt-button>
       </mt-header>
       <!-- 背景图片 -->
       <div class="themePic" v-lazy:background-image="$route.query.imgurl">
-        <div v-show="Math.abs(scrollY)<picHeight-reserved" class="playBtn">
+        <div v-show="Math.abs(scrollY) < picHeight - reserved" class="playBtn">
           <!-- <mt-button class="mt-button-play" :light="true" :primary="true" :outline="true">播放全部</mt-button> -->
         </div>
         <div class="bg-layer"></div>
@@ -28,14 +34,19 @@
         class="scrollWrap"
         ref="scroll"
       >
-        <music-list :marginTop="20" v-if="musicList.length" :list="musicList"></music-list>
+        <music-list
+          :marginTop="20"
+          v-if="musicList.length"
+          :list="musicList"
+          @notice="_receiveSon"
+        ></music-list>
       </cube-scroll>
     </div>
   </div>
 </template>
 <script type="text/javascript">
 export default {
-  name: 'songList',
+  name: "songList",
 
   data() {
     return {
@@ -50,99 +61,103 @@ export default {
       musicList: [],
       scrollY: 0,
       picHeight: 0,
-      reserved: 0
-    }
+      reserved: 0,
+    };
   },
-  props: ['mid'],
+  props: ["mid"],
   created() {
-    this.cd = {}
-    this.getSongList()
+    this.cd = {};
+    this.getSongList();
   },
   mounted() {
-    this.reserved = $('.mt-header').height()
+    this.reserved = $(".mt-header").height();
     this.$nextTick(() => {
-      this.picHeight = $('.themePic').height()
-      $('.scrollWrap').css('top', this.picHeight)
-      this.minTranslateY = this.reserved - this.picHeight
-    })
+      this.picHeight = $(".themePic").height();
+      $(".scrollWrap").css("top", this.picHeight);
+      this.minTranslateY = this.reserved - this.picHeight;
+    });
   },
   methods: {
+    _receiveSon(list, index) {
+      console.log(list);
+      console.log(index);
+    },
     onScroll({ x, y }) {
-      this.scrollY = y
-      var zIndex = 0
-      var percent = Math.abs(y / this.picHeight)
-      var translateY = Math.max(this.minTranslateY, y)
-      var scale = 0
-      var blur = Math.min(30, 30 * percent)
+      this.scrollY = y;
+      var zIndex = 0;
+      var percent = Math.abs(y / this.picHeight);
+      var translateY = Math.max(this.minTranslateY, y);
+      var scale = 0;
+      var blur = Math.min(30, 30 * percent);
       if (y > 0) {
-        scale = 1 + percent
-        $('.themePic').css({
+        scale = 1 + percent;
+        $(".themePic").css({
           transform: `scale(${scale})`,
-          zIndex: 10
-        })
+          zIndex: 10,
+        });
       } else {
-        if ($('.scrollWrap').css('overflow') != 'visible') {
-          $('.scrollWrap').css('overflow', 'visible')
+        if ($(".scrollWrap").css("overflow") != "visible") {
+          $(".scrollWrap").css("overflow", "visible");
         }
-        $('.bg-layer').css({
-          '-webkit-backdrop-filter': `blur(${blur}px)`
-        })
+        $(".bg-layer").css({
+          "-webkit-backdrop-filter": `blur(${blur}px)`,
+        });
       }
-      $('.layer').css('transform', `translate3d(0,${translateY}px,0)`)
+      $(".layer").css("transform", `translate3d(0,${translateY}px,0)`);
       if (y < this.minTranslateY) {
-        $('.themePic').css({ 'z-index': 10, height: this.reserved })
+        $(".themePic").css({ "z-index": 10, height: this.reserved });
       } else if (y < 0 && y > this.minTranslateY) {
         // (33)
-        $('.themePic').css({ 'z-index': 0, height: this.picHeight })
+        $(".themePic").css({ "z-index": 0, height: this.picHeight });
       }
     },
     onPullingUp() {
       // 加载更多数据
-      this.song_begin += this.song_num
+      this.song_begin += this.song_num;
       if (this.musicList.length >= this.total_song_num) {
       }
 
-      this.getSongList()
+      this.getSongList();
     },
     initCd(cd) {
-      this.$set(this.cd, 'dissname', cd.dissname)
-      this.$set(this.cd, 'logo', cd.logo)
+      this.$set(this.cd, "dissname", cd.dissname);
+      this.$set(this.cd, "logo", cd.logo);
     },
     getMusicList(list) {
       $.each(list, (key, item) => {
-        this.musicList.push(new this.__Song(item))
-      })
+        this.musicList.push(new this.__Song(item));
+      });
     },
 
     async getSongList() {
-      const commonParams = { begin: this.song_begin, num: this.song_num }
-      this.loading = true
+      const commonParams = { begin: this.song_begin, num: this.song_num };
+      this.loading = true;
       const action =
-        this.type === 'album'
-          ? this.__getJson('/getAlbumSongList', {
+        this.type === "album"
+          ? this.__getJson("/getAlbumSongList", {
               ...commonParams,
               albumMid: this.$route.query.mid,
-              albumID: this.$route.query.id
+              albumID: this.$route.query.id,
             })
           : this.__getJson(this.__SONG_LIST, {
               disstid: this.$route.query.dissid,
-              ...commonParams
-            })
-      let songlist = []
+              ...commonParams,
+            });
+      let songlist = [];
       await action
-        .then(response => {
-          songlist = response
+        .then((response) => {
+          songlist = response;
         })
-        .catch(console.error)
+        .catch(console.error);
 
-      this.loading = false
+      this.loading = false;
 
-      this.musicList = songlist.map(item => {
-        return new this.__Song(item)
-      })
-    }
-  }
-}
+      this.musicList = songlist.map((item) => {
+        return new this.__Song(item);
+      });
+    },
+  },
+};
 </script>
 <style scoped lang="less">
 .my-loading {
