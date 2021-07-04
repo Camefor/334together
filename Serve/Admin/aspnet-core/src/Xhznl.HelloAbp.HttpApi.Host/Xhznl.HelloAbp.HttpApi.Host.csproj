@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Xhznl.HelloAbp.Infrastructure\Xhznl.HelloAbp.Infrastructure.csproj" />
     <ProjectReference Include="..\Xhznl.HelloAbp.Application\Xhznl.HelloAbp.Application.csproj" />
     <ProjectReference Include="..\Xhznl.HelloAbp.EntityFrameworkCore.DbMigrations\Xhznl.HelloAbp.EntityFrameworkCore.DbMigrations.csproj" />
     <ProjectReference Include="..\Xhznl.HelloAbp.HttpApi\Xhznl.HelloAbp.HttpApi.csproj" />

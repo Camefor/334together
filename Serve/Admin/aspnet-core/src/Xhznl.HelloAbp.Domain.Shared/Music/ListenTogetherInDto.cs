@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Xhznl.HelloAbp.Music
 {
-   public  class ListenTogetherDto
+    public class ListenTogetherDto
     {
 
         /// <summary>
@@ -32,6 +32,50 @@ namespace Xhznl.HelloAbp.Music
         /// </summary>
         public double currentTime { get; set; }
 
+
+
+        /// <summary>
+        /// 切歌 （如果可用）
+        /// </summary>
+        public SongModel newSong { get; set; }
+
+        public string oldSongJson { get; set; }
+
+    }
+
+    public class SongModel
+    {
+
+        public long id { get; set; }
+        public string mid { get; set; }
+        public string name { get; set; }
+        public string singer { get; set; }
+        public string url { get; set; }
+        public picurlModel picurl { get; set; }
+
+
+        public string albummid { get; set; }
+        public string albumid { get; set; }
+
+        //        {
+        //    "id": 285993854,
+        //    "mid": "000BjWD738n3mi",
+        //    "name": "伯虎说 (feat.唐伯虎Annie)",
+        //    "singer": "伯爵Johnny / 唐伯虎Annie",
+        //    "url": "http://dl.stream.qqmusic.qq.com/C400003mJ8Wr0bxVjq.m4a?guid=5165714425&vkey=7644ECDE31526859FB072B87501FD77622A0FE7B3DBCC594F18A7047C3D5D9F5E174C5BFCC35D3CD3698E424B3F72E09071FFB66DD7D7279&uin=&fromtag=38",
+        //    "picurl": {
+        //        "src": "https://y.gtimg.cn/music/photo_new/T002R300x300M000002ESytn2uEU7A.jpg?max_age=2592000",
+        //        "error": "https://y.gtimg.cn/music/photo_new/T001R300x300M000001Dd1hY0CGuxZ.jpg"
+        //    },
+        //    "albummid": "002ESytn2uEU7A",
+        //    "albumid": 15746559
+        //}
+      
+    }
+    public class picurlModel
+    {
+        public string src { get; set; }
+        public string error { get; set; }
     }
 
     public enum actionTypeEnum

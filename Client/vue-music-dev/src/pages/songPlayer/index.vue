@@ -354,7 +354,7 @@ export default {
       this.oldIndex = oldIndex;
     },
     playing() {
-      // debugger
+      debugger;
       if (!this.songReady) {
         return;
       }
@@ -384,6 +384,8 @@ export default {
       newHeight == 0 && this.lyricStop();
     },
     async currentSong(newSong, oldSong) {
+      debugger;
+
       if (this.__isEmptyObject(newSong)) {
         this.audio.src = "";
         return;
@@ -404,7 +406,13 @@ export default {
       // 重置
       this.resetStart();
 
-      //todo:传递切换音乐信号，歌曲相同。
+      //todo:传递切换音乐信号给serve，歌曲相同。
+      var _obj = {
+        funcName: "currentSong",
+        actionType: "currentSong",
+        newSong: newSong,
+      };
+      this.invokeSignalRServe(_obj);
     },
   },
   methods: {
@@ -670,6 +678,7 @@ export default {
         });
     },
     play() {
+      debugger;
       if (!this.playing) {
         this.togglePlaying();
       }
@@ -912,34 +921,6 @@ export default {
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
-      //signalR接收Serve端的数据
-      _this.connection.on("SignalR_ReceiveData", function (data) {
-        var res = JSON.parse(data);
-        switch (res.actionType) {
-          case "onpause":
-            //不能调用外层  onpause 就是逻辑不要放一起，单一自责原则
-            _this.setPlayingState(false);
-            _this.lyricStop();
-            break;
-          case "onplay":
-            _this.setPlayingState(true);
-            break;
-          case "onProgressChange":
-            var currentTime = res.currentTime;
-            _this.draging = false;
-            _this.currentTime = currentTime;
-            _this.seek();
-            _this.isBuffered = _this.curRange.range > currentTime;
-            _this.audio.currentTime = currentTime;
-            _this.play();
-            break;
-        }
-      });
-
-      _this.connection.start().catch((err) => {
-        console.log(err);
-      });
-
       //.net core 版本中默认不会自动重连，需手动调用 withAutomaticReconnect
       // const connection = new signalR.HubConnectionBuilder()
       //   .withAutomaticReconnect() //断线自动重连
@@ -951,6 +932,93 @@ export default {
       //   debugger;
       //   console.log(connectionId);
       // });
+
+      //signalR接收Serve端的数据
+      _this.connection.on("SignalR_ReceiveData", function (data) {
+        var res = JSON.parse(data);
+        switch (res.actionType) {
+          case "onpause"://暂停指令
+            //不能调用外层 把  方法 onpause 里的拿出来调用
+            _this.setPlayingState(false);
+            _this.lyricStop();
+            break;
+
+          case "onplay"://播放指令
+            _this.setPlayingState(true);
+            break;
+
+          case "onProgressChange"://改变播放进度指令
+            var currentTime = res.currentTime;
+            _this.draging = false;
+            _this.currentTime = currentTime;
+            _this.seek();
+            _this.isBuffered = _this.curRange.range > currentTime;
+            _this.audio.currentTime = currentTime;
+            _this.play();
+            break;
+
+          case "currentSong"://切歌指令
+            debugger;
+            var newSong = res.newSong;
+            //流程： currentSong（）=>  playing() => playing() =>play() => play()
+            _this.myTest();
+            // _this.currentSong(newSong, {});
+            // _this.playing();
+            // _this.play();
+            // if (_this.__isEmptyObject(currentSong)) {
+            //   _this.audio.src = "";
+            //   return;
+            // }
+            // if (_this.$refs.progress) {
+            //   _this.$refs.progress.transition = "all .2s";
+            // }
+
+            // // const selectItem = { range: 0, radio };
+
+            // _this.oldUrl = _this.audio.src;
+            // // this.oldRadio = this.radio;
+            // // _this.curRange = selectItem;
+            // _this.audio.src = currentSong.url;
+            // _this.audio.currentTime = _this.currentTime;
+
+            // 获取歌词
+
+            // this.radio = 96;
+            // _this.curRange = { radio: 96, range: 0 }; //缓冲进度置零
+            // _this.currentLyric && _this.currentLyric.stop();
+            // _this.currentLyric = null;
+
+            // // _this.getLyric();
+            // var lyric = "",
+            //   param = { id: currentSong.id };
+            // lyric =  _this.currentSong.getLyric();
+            // _this.currentLyric = new lyricParser(lyric, _this.handleLyric);
+
+            // if (_this.currentLyric.lines.length > 0) {
+            //   _this.curLyric = _this.currentLyric.lines[_this.curLine].txt;
+            //   _this.songReady && _this.currentLyric.play();
+            // } else if (lyric.split("\n").length > 2) {
+            //   _this.currentLyric.lines = lyric
+            //     .split("\n")
+            //     .map((txt) => ({ txt }));
+            //   _this.$nextTick(() => {
+            //     _this.lyricStop();
+            //     _this.curLine = -1;
+            //   });
+            // }
+
+            // 重置
+            // _this.resetStart();
+
+            break;
+        }
+      });
+
+      _this.connection.start().catch((err) => {
+        console.log(err);
+      });
+
+      
     },
 
     /*调用后端方法 SignalR Serve 传入参数*/
@@ -960,10 +1028,15 @@ export default {
       object.val = true;
       //object为对象类型,如果可用。再序列化为json 字符串。
       //object对象其中要包括actionType属性，代表指令标识。 比如开始、暂停当前播放，切歌 等等
+      var jsonPar = JSON.stringify(object);
       console.log(object);
-      _this.connection.invoke("SendMessage", JSON.stringify(object));
+      console.log(jsonPar);
+      _this.connection.invoke("SendMessage", jsonPar);
       //当发起方已经完成相应指令后，serve无需再给发起方自己发送指令。或者发送指令，发起方这边不要再重复调用，否则会形成死循环
       //解决方案：那就把Client的 “状态” 都给serve,让serve决定要不要下发指令
+    },
+    myTest() {
+      console.log("hello in myTest");
     },
   },
 };

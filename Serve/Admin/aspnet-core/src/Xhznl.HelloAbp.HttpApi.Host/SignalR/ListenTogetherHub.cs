@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.SignalR;
+using Xhznl.HelloAbp.Infrastructure.Extensions;
 using Xhznl.HelloAbp.Music;
 
 namespace Xhznl.HelloAbp.SignalR
@@ -33,14 +34,14 @@ namespace Xhznl.HelloAbp.SignalR
         /// <returns></returns>
         public async Task SendMessage(string ajsonParameter)
         {
-            var requestParameter = System.Text.Json.JsonSerializer.Deserialize<ListenTogetherDto>(ajsonParameter);
-
+            var requestParameter = ajsonParameter.ToObject<ListenTogetherDto>();
 
             //记录第一次请求的id 返回的响应不给他了
             var response = new ListenTogetherDto {
                 funcName = requestParameter.funcName,
                 actionType = requestParameter.actionType,
-               currentTime = requestParameter.currentTime 
+                currentTime = requestParameter.currentTime,
+                newSong = requestParameter.newSong
             };
 
 
