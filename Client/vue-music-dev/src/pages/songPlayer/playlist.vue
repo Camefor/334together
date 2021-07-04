@@ -134,6 +134,15 @@ export default {
     },
     deleteOne(item) {
       this.deleteSong(item);
+      try {
+        //todo:传递 从播放列表 删除一个歌曲【播放列表，不是该歌单歌曲】 信号给serve，
+        var _obj = {
+          funcName: "deleteOne",
+          actionType: "deleteOne",
+          newSong: item,
+        };
+        this.invokeSignalRServe(_obj);
+      } catch (error) {}
       if (!this.playlist.length) {
         this.hide();
       }
@@ -143,6 +152,14 @@ export default {
         index = this.playlist.findIndex((song) => item.id === song.id);
       }
       this.setCurrentIndex(index);
+      //todo 选择播放列表中的歌曲 serve
+      var _obj = {
+        funcName: "playItem",
+        actionType: "playItem",
+        newSong: item,
+        index: index,
+      };
+      this.invokeSignalRServe(_obj);
     },
     scrollToCurrent() {
       const index = this.sequenceList.findIndex(
@@ -158,29 +175,35 @@ export default {
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
-      //.net core 版本中默认不会自动重连，需手动调用 withAutomaticReconnect
-      // const connection = new signalR.HubConnectionBuilder()
-      //   .withAutomaticReconnect() //断线自动重连
-      //   .withUrl(hubUrl) //传递参数Query["access_token"]
-      //   .build();
-
-      //自动重连成功后的处理
-      // connection.onreconnected((connectionId) => {
-      //   debugger;
-      //   console.log(connectionId);
-      // });
-
       //signalR接收Serve端的数据
       _this.connection.on("SignalR_ReceiveData", function (data) {
         var res = JSON.parse(data);
         switch (res.actionType) {
-          case "clearList": //切歌指令(下一首)。要确保播放列表也同步一致,歌曲索引一致
+          case "clearList": //清空播放列表
             try {
               _this.deleteSongList();
               _this.hide();
             } catch (err) {
               console.log(err);
             }
+            break;
+          case "deleteOne": //从播放列表移除指定歌曲对象
+            try {
+              _this.deleteSong(res.newSong);
+            } catch (error) {}
+            if (!_this.playlist.length) {
+              _this.hide();
+            }
+            break;
+          case "playItem": //从播放列表播放指定歌曲
+            try {
+              var index = res.index;
+              if (_this.mode === playMode.random) {
+                index = _this.playlist.findIndex((song) => res.newSong.id === song.id);
+              }
+              _this.setCurrentIndex(index);
+            } catch (error) {}
+
             break;
         }
       });

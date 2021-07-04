@@ -1,0 +1,219 @@
+// 20210704164049
+// http://localhost:8080/api/getSongSheetList?sin=0&ein=9
+
+{
+  "code": 0,
+  "subcode": 0,
+  "message": "",
+  "default": 0,
+  "data": {
+    "uin": 0,
+    "categoryId": 10000000,
+    "sortId": 5,
+    "sum": 11264,
+    "sin": 0,
+    "ein": 9,
+    "list": [
+      {
+        "dissid": "7713574197",
+        "createtime": "2020-09-15",
+        "commit_time": "2020-09-15",
+        "dissname": "国风BGM｜再听已是曲中人",
+        "imgurl": "http://qpic.y.qq.com/music_cover/wKQRLialAQmEvibGBqEjNTTTqj6bQZNvricyCAwbavPicQA2YAOfjrg6Kw/300?n=1",
+        "introduction": "",
+        "listennum": 54451645,
+        "score": 0.0,
+        "version": 0,
+        "creator": {
+          "type": 0,
+          "qq": 1273179433,
+          "encrypt_uin": "oK-loi6lNKvioz**",
+          "name": "稍等一下～",
+          "isVip": 0,
+          "avatarUrl": "",
+          "followflag": 0
+        }
+      },
+      {
+        "dissid": "7752154812",
+        "createtime": "2020-10-18",
+        "commit_time": "2020-10-18",
+        "dissname": "马嘉祺 | 以梦为马，祺力向前",
+        "imgurl": "http://qpic.y.qq.com/music_cover/mfzYiaJxuK5Vw3Py0JkNhpVdJlbecI2Fzv0nrzMX9SQbdB05k33keng/300?n=1",
+        "introduction": "",
+        "listennum": 2810327,
+        "score": 0.0,
+        "version": 0,
+        "creator": {
+          "type": 0,
+          "qq": 2151516110,
+          "encrypt_uin": "ow6koK457w65on**",
+          "name": "朗十七",
+          "isVip": 0,
+          "avatarUrl": "",
+          "followflag": 0
+        }
+      },
+      {
+        "dissid": "7309085056",
+        "createtime": "2020-05-24",
+        "commit_time": "2020-05-24",
+        "dissname": "古风轻风小雨一点点，静水漪波澜",
+        "imgurl": "http://qpic.y.qq.com/music_cover/IBYdxiaKcwiaGjOTTttTnHEtlsV2poPEaapib80p2fg7FE9WSquE2kxIw/300?n=1",
+        "introduction": "",
+        "listennum": 3888525,
+        "score": 0.0,
+        "version": 0,
+        "creator": {
+          "type": 0,
+          "qq": 3535874353,
+          "encrypt_uin": "oi4i7Kcl7eokoz**",
+          "name": "白砂糖不甜",
+          "isVip": 0,
+          "avatarUrl": "",
+          "followflag": 0
+        }
+      },
+      {
+        "dissid": "7669061189",
+        "createtime": "2020-09-06",
+        "commit_time": "2020-09-06",
+        "dissname": "像失望和委屈这种东西没必要解释",
+        "imgurl": "http://qpic.y.qq.com/music_cover/PsnFr0GWQCBjKMLRg1cHmaj1CIuYRCbcQ8wZbZmvxVUGZjkluSibqdw/300?n=1",
+        "introduction": "",
+        "listennum": 2917256,
+        "score": 0.0,
+        "version": 0,
+        "creator": {
+          "type": 0,
+          "qq": 2967006502,
+          "encrypt_uin": "owEs7inz7w4zoc**",
+          "name": "゛Gao.H.壹柒 ",
+          "isVip": 0,
+          "avatarUrl": "",
+          "followflag": 0
+        }
+      },
+      {
+        "dissid": "7707261125",
+        "createtime": "2020-09-06",
+        "commit_time": "2020-09-06",
+        "dissname": "甜度爆表 | 旋律说唱狙击少女心",
+        "imgurl": "http://qpic.y.qq.com/music_cover/s4SoBc0IrDEDpHKlDkDflKbCgbic5ldSQrdsEafqvxULdib5CvKhaibww/300?n=1",
+        "introduction": "",
+        "listennum": 2878847,
+        "score": 0.0,
+        "version": 0,
+        "creator": {
+          "type": 0,
+          "qq": 3509852917,
+          "encrypt_uin": "oi4zNKckowE57z**",
+          "name": "我想要两颗西柚",
+          "isVip": 0,
+          "avatarUrl": "",
+          "followflag": 0
+        }
+      },
+      {
+        "dissid": "7494888416",
+        "createtime": "2020-04-21",
+        "commit_time": "2020-04-21",
+        "dissname": "清新悦耳 · 流行钢琴曲收集",
+        "imgurl": "http://p.qpic.cn/music_cover/JwclnudaObJXGgJOkTPBGbAlKc8bQByRzRBUmlcqHcbCv11txcplPQ/600?n=1",
+        "introduction": "",
+        "listennum": 1192640,
+        "score": 0.0,
+        "version": 0,
+        "creator": {
+          "type": 2,
+          "qq": 1834936922,
+          "encrypt_uin": "oKci7eEi7wEAoc**",
+          "name": "顾怀安",
+          "isVip": 2,
+          "avatarUrl": "",
+          "followflag": 0
+        }
+      },
+      {
+        "dissid": "885955294",
+        "createtime": "2017-09-28",
+        "commit_time": "2017-09-28",
+        "dissname": "舒缓旋律，看书听歌两不误",
+        "imgurl": "http://p.qpic.cn/music_cover/icbJFJS2MlZ5b4OlnQoQKjiaYmSevibAiavSR5GkLKQMMKbDeoBiamsvDVQ/600?n=1",
+        "introduction": "",
+        "listennum": 8631797,
+        "score": 0.0,
+        "version": 0,
+        "creator": {
+          "type": 2,
+          "qq": 1185847270,
+          "encrypt_uin": "oK6F7KcP7i-lon**",
+          "name": "汤圆儿",
+          "isVip": 2,
+          "avatarUrl": "",
+          "followflag": 0
+        }
+      },
+      {
+        "dissid": "5375317625",
+        "createtime": "2018-10-27",
+        "commit_time": "2018-10-27",
+        "dissname": "「硬核战歌」无音乐不游戏",
+        "imgurl": "http://p.qpic.cn/music_cover/teNC3ZiaQKialg3foOIzDfLEf5GrWUPEgs12Gzib32p8ibluD96kzDsBZw/600?n=1",
+        "introduction": "",
+        "listennum": 79050261,
+        "score": 0.0,
+        "version": 0,
+        "creator": {
+          "type": 0,
+          "qq": 1127914446,
+          "encrypt_uin": "oK6A7iE57evP7c**",
+          "name": "青梦",
+          "isVip": 0,
+          "avatarUrl": "",
+          "followflag": 0
+        }
+      },
+      {
+        "dissid": "7775281202",
+        "createtime": "2020-11-15",
+        "commit_time": "2020-11-15",
+        "dissname": "轻音乐: 倾听慵懒风治愈旋律",
+        "imgurl": "http://qpic.y.qq.com/music_cover/ebxVDMSrIr0KHic07h73iaczIXibvia2vcQN8UmeMuxKB3Q7A4qjiahRZEg/300?n=1",
+        "introduction": "",
+        "listennum": 474237,
+        "score": 0.0,
+        "version": 0,
+        "creator": {
+          "type": 0,
+          "qq": 1242012453,
+          "encrypt_uin": "oK-Pown5owvkoz**",
+          "name": "自渡·",
+          "isVip": 0,
+          "avatarUrl": "",
+          "followflag": 0
+        }
+      },
+      {
+        "dissid": "7199061409",
+        "createtime": "2019-09-17",
+        "commit_time": "2019-09-17",
+        "dissname": "中国新说唱 | 这些现场都很炸！",
+        "imgurl": "http://p.qpic.cn/music_cover/bQxrYasiapuzXe79Abdsw6exrv67DCv9ia29MF6E0BmZgjSGj2fda0KA/600?n=1",
+        "introduction": "",
+        "listennum": 1481435,
+        "score": 0.0,
+        "version": 0,
+        "creator": {
+          "type": 2,
+          "qq": 3446073512,
+          "encrypt_uin": "oivP7wnloi45oc**",
+          "name": "酸柠檬好好恰",
+          "isVip": 2,
+          "avatarUrl": "",
+          "followflag": 0
+        }
+      }
+    ]
+  }
+}

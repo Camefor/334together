@@ -39,8 +39,10 @@ namespace Xhznl.HelloAbp.Music
         /// </summary>
         public SongModel newSong { get; set; }
 
-        public string oldSongJson { get; set; }
-
+        /// <summary>
+        /// 如果可用 代表 当前播放的播放列表的歌曲索引
+        /// </summary>
+        public int index { get; set; }
     }
 
     public class SongModel

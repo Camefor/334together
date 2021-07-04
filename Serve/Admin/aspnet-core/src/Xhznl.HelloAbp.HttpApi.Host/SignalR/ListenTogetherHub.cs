@@ -41,8 +41,9 @@ namespace Xhznl.HelloAbp.SignalR
                 funcName = requestParameter.funcName,
                 actionType = requestParameter.actionType,
                 currentTime = requestParameter.currentTime,
-                newSong = requestParameter.newSong
-            };
+                newSong = requestParameter.newSong,
+                index  =requestParameter.index
+            };//copy object
 
 
             //switch (requestParameter.actionType)
