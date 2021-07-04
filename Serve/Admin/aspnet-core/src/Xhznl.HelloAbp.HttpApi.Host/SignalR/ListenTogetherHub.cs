@@ -42,7 +42,8 @@ namespace Xhznl.HelloAbp.SignalR
                 actionType = requestParameter.actionType,
                 currentTime = requestParameter.currentTime,
                 newSong = requestParameter.newSong,
-                index  =requestParameter.index
+                index  =requestParameter.index,
+                list = requestParameter.list
             };//copy object
 
 

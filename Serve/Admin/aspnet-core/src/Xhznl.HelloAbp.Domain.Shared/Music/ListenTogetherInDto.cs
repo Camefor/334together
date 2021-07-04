@@ -43,6 +43,12 @@ namespace Xhznl.HelloAbp.Music
         /// 如果可用 代表 当前播放的播放列表的歌曲索引
         /// </summary>
         public int index { get; set; }
+
+
+        /// <summary>
+        /// 待播放列表 如果可用，初始化建立连接时传递 
+        /// </summary>
+        public List<SongModel> list { get; set; }
     }
 
     public class SongModel
