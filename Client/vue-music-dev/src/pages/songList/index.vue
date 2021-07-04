@@ -183,13 +183,43 @@ export default {
         .build();
 
       //signalR接收Serve端的数据
-      _this.connection.on("SignalR_ReceiveData", function (data) {
+      _this.connection.on("SignalR_ReceiveData", async function (data) {
         var res = JSON.parse(data);
         switch (res.actionType) {
           case "selectPlay": //
-          console.log(res);
+            console.log(res);
             var _list = _this.__cloneDeep__(res.list);
             var _index = res.index;
+
+            _list.push({
+              id: _index,
+              mid: "6666",
+              name: "666 (Live)",
+              singer: "666",
+              url: "http://dl.stream.qqmusic.qq.com/C400003WeSm61lh8L0.m4a?guid=5165714425&vkey=C82FABE3A56B197DF74E87257E6AEF2B9676DCFD91A14824DAF035BA6C79FA8FAD8DC40E913CA694CE5C0060539146D914F2F2B7F117A572&uin=&fromtag=38",
+              picurl: {
+                src: "https://y.gtimg.cn/music/photo_new/T002R300x300M000.jpg?max_age=2592000",
+                error:
+                  "https://y.gtimg.cn/music/photo_new/T001R300x300M000004aejZR04LPCH.jpg",
+              },
+              albummid: "",
+              albumid: "0",
+            });
+            //把index 通过 list传递过去
+            // {
+            //     "id": 127595843,
+            //     "mid": "000sQTtp2qSl2Y",
+            //     "name": "什么是快乐星球 (Live)",
+            //     "singer": "马嘉祺",
+            //     "url": "http://dl.stream.qqmusic.qq.com/C400003WeSm61lh8L0.m4a?guid=5165714425&vkey=C82FABE3A56B197DF74E87257E6AEF2B9676DCFD91A14824DAF035BA6C79FA8FAD8DC40E913CA694CE5C0060539146D914F2F2B7F117A572&uin=&fromtag=38",
+            //     "picurl": {
+            //         "src": "https://y.gtimg.cn/music/photo_new/T002R300x300M000.jpg?max_age=2592000",
+            //         "error": "https://y.gtimg.cn/music/photo_new/T001R300x300M000004aejZR04LPCH.jpg"
+            //     },
+            //     "albummid": "",
+            //     "albumid": "0"
+            // }
+
             //初始化播放列表
             _this.selectPlay({ list: _list, _index });
             try {
