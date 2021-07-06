@@ -49,6 +49,15 @@ namespace Xhznl.HelloAbp.Music
         /// 待播放列表 如果可用，初始化建立连接时传递 
         /// </summary>
         public List<SongModel> list { get; set; }
+
+
+        /// <summary>
+        /// 播放模式：
+        /// 0：顺序播放
+        /// 1:循环播放
+        /// 2：随机播放
+        /// </summary>
+        public int mode { get; set; }
     }
 
     public class SongModel

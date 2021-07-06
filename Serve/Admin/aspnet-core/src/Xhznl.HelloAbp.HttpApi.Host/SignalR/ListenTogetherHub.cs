@@ -100,7 +100,8 @@ namespace Xhznl.HelloAbp.SignalR
                 currentTime = requestParameter.currentTime,
                 newSong = requestParameter.newSong,
                 index  =requestParameter.index,
-                list = requestParameter.list
+                list = requestParameter.list,
+                mode =requestParameter.mode
             };//copy object
             var clientProxy = Clients.AllExcept(requestParameter.connectionId);//不给自己发
             await clientProxy.SendAsync("SignalRSendForPlayList", System.Text.Json.JsonSerializer.Serialize(response));

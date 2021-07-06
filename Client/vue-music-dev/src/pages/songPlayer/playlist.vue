@@ -79,6 +79,12 @@ export default {
       };
     },
     modeText() {
+      var _obj = {
+        funcName: "chanegMode",
+        actionType: "chanegMode",
+        mode: this.mode,
+      };
+      this.invokeSignalRServe(_obj);
       return this.mode === playMode.loop
         ? "循环播放"
         : this.mode === playMode.random
@@ -92,7 +98,10 @@ export default {
   methods: {
     ...mapMutations({
       setCurrentIndex: "SET_CURRENT_INDEX",
+      setPlaylist: "SET_PLAYLIST",
+      setPlayMode: "SET_PLAY_MODE",
     }),
+
     ...mapActions(["deleteSong", "deleteSongList"]),
     // ...signalRMusic,
     hide() {
@@ -166,6 +175,25 @@ export default {
       _this.signalr.on("SignalRSendForPlayList", (data) => {
         var res = JSON.parse(data);
         switch (res.actionType) {
+          case "chanegMode":
+            var mode = res.mode;
+            if (this.mode != res.mode) {
+              this.changeMode();
+              let message = "";
+              if (mode === playMode.random) {
+                message = "随机播放";
+              } else {
+                if (mode === playMode.loop) {
+                  message = "循环播放";
+                } else {
+                  message = "顺序播放";
+                }
+              }
+              this.Toast({
+                message,
+              });
+            }
+            break;
           case "clearList": //清空播放列表
             try {
               _this.deleteSongList();
@@ -192,7 +220,6 @@ export default {
               }
               _this.setCurrentIndex(index);
             } catch (error) {}
-
             break;
         }
       });
@@ -206,6 +233,7 @@ export default {
         object.connectionId = this.signalr.connectionId;
         object.val = true;
         var jsonPar = JSON.stringify(object);
+        console.log(object);
         this.signalr.invoke("SendMessageInPlayList", jsonPar);
       } else {
         console.error("他喵的，服务器连接失败啦!");
