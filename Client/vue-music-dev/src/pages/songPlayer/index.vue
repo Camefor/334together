@@ -258,16 +258,10 @@ import { shuffle } from "@/common/js/util";
 import lyricParser from "lyric-parser";
 import { prefixStyle } from "@/config/dom";
 
-//添加signalr js库
-import * as signalR from "@microsoft/signalr";
-
 const filter = prefixStyle("filter");
 const transitionDuration = prefixStyle("transition-duration");
 const transform = prefixStyle("transform");
 const curRange = { radio: 96, range: 0 };
-
-//初始化signalR
-let hubUrl = "http://localhost:44370/hubs/listenTogether";
 
 export default {
   name: "",
@@ -288,7 +282,6 @@ export default {
       currentShow: "cd",
       songReady: false,
       showProgressBar: false,
-      connection: "",//signalR的连接对象
       isPlay: false,
     };
   },
@@ -912,28 +905,12 @@ export default {
     open() {
       this.setFullScreen(true);
     },
-
     initSignalR() {
-      var _this = this;
-      _this.connection = new signalR.HubConnectionBuilder()
-        .withUrl(hubUrl)
-        .configureLogging(signalR.LogLevel.Information)
-        .build();
-
-      //.net core 版本中默认不会自动重连，需手动调用 withAutomaticReconnect
-      // const connection = new signalR.HubConnectionBuilder()
-      //   .withAutomaticReconnect() //断线自动重连
-      //   .withUrl(hubUrl) //传递参数Query["access_token"]
-      //   .build();
-
-      //自动重连成功后的处理
-      // connection.onreconnected((connectionId) => {
-      //   debugger;
-      //   console.log(connectionId);
-      // });
-
       //signalR接收Serve端的数据
-      _this.connection.on("SignalR_ReceiveData", function (data) {
+      var _this = this;
+      _this.signalr.off("SignalRSendForSongPlayIndex");
+      _this.signalr.on("SignalRSendForSongPlayIndex", (data) => {
+        console.log("signalr 来了,开始处理指令");
         var res = JSON.parse(data);
         switch (res.actionType) {
           case "onpause": //暂停指令
@@ -941,11 +918,9 @@ export default {
             _this.setPlayingState(false);
             _this.lyricStop();
             break;
-
           case "onplay": //播放指令
             _this.setPlayingState(true);
             break;
-
           case "onProgressChange": //改变播放进度指令
             var currentTime = res.currentTime;
             _this.draging = false;
@@ -955,7 +930,6 @@ export default {
             _this.audio.currentTime = currentTime;
             _this.play();
             break;
-
           case "togglePrev": //切歌指令(上一首)。要确保播放列表也同步一致,歌曲索引一致
             if (!_this.songReady) {
               return;
@@ -967,7 +941,6 @@ export default {
             _this.setCurrentIndex(prevIndex);
             _this.songReady = false;
             break;
-
           case "toggleNext": //切歌指令(下一首)。要确保播放列表也同步一致,歌曲索引一致
             if (!_this.songReady) {
               return;
@@ -979,25 +952,56 @@ export default {
             _this.setCurrentIndex(nextIndex);
             _this.songReady = false;
             break;
-        }
-      });
 
-      _this.connection.start().catch((err) => {
-        console.log(err);
+                case "clearList": //清空播放列表
+            try {
+              _this.deleteSongList();
+              _this.hide();
+            } catch (err) {
+              console.log(err);
+            }
+            break;
+          case "deleteOne": //从播放列表移除指定歌曲对象
+            try {
+              _this.deleteSong(res.newSong);
+            } catch (error) {}
+            if (!_this.playlist.length) {
+              _this.hide();
+            }
+            break;
+          case "playItem": //从播放列表播放指定歌曲
+            try {
+              var index = res.index;
+              if (_this.mode === playMode.random) {
+                index = _this.playlist.findIndex(
+                  (song) => res.newSong.id === song.id
+                );
+              }
+              _this.setCurrentIndex(index);
+            } catch (error) {}
+
+            break;
+        }
       });
     },
 
     /*调用后端方法 SignalR Serve 传入参数*/
     invokeSignalRServe(object) {
-      var _this = this;
-      object.connectionId = _this.connection.connectionId;
-      object.val = true;
-      //object为对象类型,如果可用。再序列化为json 字符串。
-      //object对象其中要包括actionType属性，代表指令标识。 比如开始、暂停当前播放，切歌 等等
-      var jsonPar = JSON.stringify(object);
-      console.log(object);
-      console.log(jsonPar);
-      _this.connection.invoke("SendMessage", jsonPar);
+      //检查signalR连接状态
+      if (
+        this.signalr.connectionState == "Connected" &&
+        this.signalr.connectionStarted
+      ) {
+        var _this = this;
+        object.connectionId = _this.signalr.connectionId;
+        object.val = true;
+        var jsonPar = JSON.stringify(object);
+        _this.signalr.invoke("SendMessageInSongPlayIndex", jsonPar);
+      }else{
+        console.error('他喵的，服务器连接失败啦!');
+      }
+      // //object为对象类型,如果可用。再序列化为json 字符串。
+      // //object对象其中要包括actionType属性，代表指令标识。 比如开始、暂停当前播放，切歌 等等
       //当发起方已经完成相应指令后，serve无需再给发起方自己发送指令。或者发送指令，发起方这边不要再重复调用，否则会形成死循环
       //解决方案：那就把Client的 “状态” 都给serve,让serve决定要不要下发指令
     },

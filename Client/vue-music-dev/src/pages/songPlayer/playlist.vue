@@ -56,14 +56,6 @@
 import { mapGetters, mapMutations, mapActions } from "vuex";
 import mixin from "./mixin.js";
 import playMode from "@/common/js/config";
-// import signalRMusic from "@/common/js/signalRMusic";
-import * as signalR from "@microsoft/signalr";
-//初始化signalR
-let token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6ImFkbWluIiwiSUQiOiIyIiwiZXhwIjoxNTk5NjM3NjIxLCJpc3MiOiJuZXRsb2NrIiwiYXVkIjoibmV0bG9ja3MifQ.9T1zw2LaCx4enZLj5RCfxhJ85a169NPMqmW0n5OlzgI";
-
-// let hubUrl = "http://localhost:44370/signalr-hubs/test";
-let hubUrl = "http://localhost:44370/hubs/listenTogether";
 
 export default {
   name: "",
@@ -170,13 +162,8 @@ export default {
 
     initSignalR() {
       var _this = this;
-      _this.connection = new signalR.HubConnectionBuilder()
-        .withUrl(hubUrl)
-        .configureLogging(signalR.LogLevel.Information)
-        .build();
-
-      //signalR接收Serve端的数据
-      _this.connection.on("SignalR_ReceiveData", function (data) {
+      _this.signalr.off("SignalRSendForPlayList");
+      _this.signalr.on("SignalRSendForPlayList", (data) => {
         var res = JSON.parse(data);
         switch (res.actionType) {
           case "clearList": //清空播放列表
@@ -199,7 +186,9 @@ export default {
             try {
               var index = res.index;
               if (_this.mode === playMode.random) {
-                index = _this.playlist.findIndex((song) => res.newSong.id === song.id);
+                index = _this.playlist.findIndex(
+                  (song) => res.newSong.id === song.id
+                );
               }
               _this.setCurrentIndex(index);
             } catch (error) {}
@@ -207,25 +196,20 @@ export default {
             break;
         }
       });
-
-      _this.connection.start().catch((err) => {
-        console.log(err);
-      });
     },
-
     /*调用后端方法 SignalR Serve 传入参数*/
     invokeSignalRServe(object) {
-      var _this = this;
-      object.connectionId = _this.connection.connectionId;
-      object.val = true;
-      //object为对象类型,如果可用。再序列化为json 字符串。
-      //object对象其中要包括actionType属性，代表指令标识。 比如开始、暂停当前播放，切歌 等等
-      var jsonPar = JSON.stringify(object);
-      console.log(object);
-      console.log(jsonPar);
-      _this.connection.invoke("SendMessage", jsonPar);
-      //当发起方已经完成相应指令后，serve无需再给发起方自己发送指令。或者发送指令，发起方这边不要再重复调用，否则会形成死循环
-      //解决方案：那就把Client的 “状态” 都给serve,让serve决定要不要下发指令
+      if (
+        this.signalr.connectionState == "Connected" &&
+        this.signalr.connectionStarted
+      ) {
+        object.connectionId = this.signalr.connectionId;
+        object.val = true;
+        var jsonPar = JSON.stringify(object);
+        this.signalr.invoke("SendMessageInPlayList", jsonPar);
+      } else {
+        console.error("他喵的，服务器连接失败啦!");
+      }
     },
   },
   watch: {

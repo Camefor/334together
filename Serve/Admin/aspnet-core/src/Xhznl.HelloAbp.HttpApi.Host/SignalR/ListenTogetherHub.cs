@@ -34,7 +34,7 @@ namespace Xhznl.HelloAbp.SignalR
         /// </summary>
         /// <param name="ajsonParameter">统一格式为json</param>
         /// <returns></returns>
-        public async Task SendMessage(string ajsonParameter)
+        public async Task SendMessageInSongPlayIndex(string ajsonParameter)
         {
             var requestParameter = ajsonParameter.ToObject<ListenTogetherDto>();
 
@@ -85,9 +85,25 @@ namespace Xhznl.HelloAbp.SignalR
 
             var clientProxy = Clients.AllExcept(requestParameter.connectionId);//不给自己发
 
-            await clientProxy.SendAsync("SignalR_ReceiveData", System.Text.Json.JsonSerializer.Serialize(response));
+            await clientProxy.SendAsync("SignalRSendForSongPlayIndex", System.Text.Json.JsonSerializer.Serialize(response));
 
 
+        }     
+        
+        public async Task SendMessageInPlayList(string ajsonParameter)
+        {
+            var requestParameter = ajsonParameter.ToObject<ListenTogetherDto>();
+            //记录第一次请求的id 返回的响应不给他了
+            var response = new ListenTogetherDto {
+                funcName = requestParameter.funcName,
+                actionType = requestParameter.actionType,
+                currentTime = requestParameter.currentTime,
+                newSong = requestParameter.newSong,
+                index  =requestParameter.index,
+                list = requestParameter.list
+            };//copy object
+            var clientProxy = Clients.AllExcept(requestParameter.connectionId);//不给自己发
+            await clientProxy.SendAsync("SignalRSendForPlayList", System.Text.Json.JsonSerializer.Serialize(response));
         }
     }
 }

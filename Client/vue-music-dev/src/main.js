@@ -31,8 +31,11 @@ import vueTap from 'v-tap'
 
 // 全局设置mixin
 import './common/mixins/global.js'
+import signalr from './common/js/signalR.js'
+
 
 Vue.use(vueTap)
+Vue.use(signalr)
 
 // new vconsole()
 
