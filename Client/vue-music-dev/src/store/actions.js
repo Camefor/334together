@@ -11,11 +11,13 @@ function findIndex(list, song) {
 
 export const selectPlay = function ({ commit, state }, { list, index }) {
   commit(types.SET_SEQUENCE_LIST, list)
-  // debugger;
 
-  if (!index) {
-    index = list[list.length - 1].id;
-  }
+  //强制把index设置为 0；
+  //意味着 不管选择哪个歌曲，都会默认选择第一个，这样各个客户端就同步了
+  index = 0
+  // if (!index) {
+  //   index = list[list.length - 1].id;
+  // }
 
 
 
