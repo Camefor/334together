@@ -40,7 +40,7 @@ export default {
       muted: false,
       radios,
       showFlag: false,
-      volume: 20
+      volume: 80
     };
   },
   props: {
