@@ -99,7 +99,7 @@ export default {
         index: index,
       };
       //web socket 长度限制
-      this.invokeSignalRServe(_obj);
+      // this.invokeSignalRServe(_obj);
     },
     onScroll({ x, y }) {
       this.scrollY = y;
@@ -221,7 +221,8 @@ export default {
             // }
 
             //初始化播放列表
-            _this.selectPlay({ list: _list, _index });
+            // _this.selectPlay({ list: _list, _index });
+
             try {
             } catch (error) {
               console.log(error);
