@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
@@ -20,6 +21,7 @@ namespace Xhznl.HelloAbp
         typeof(AbpFeatureManagementApplicationModule),
         typeof(EasyAbp.Abp.SettingUi.SettingUiApplicationModule),
         typeof(FileManagementApplicationModule),
+        typeof(AbpCachingModule),
         typeof(DataDictionaryApplicationModule)
         )]
     public class HelloAbpApplicationModule : AbpModule
