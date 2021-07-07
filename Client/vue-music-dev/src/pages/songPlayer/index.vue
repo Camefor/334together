@@ -147,7 +147,7 @@
             <p @click="toggleNext" class="toggle-next">
               <i class="iconfont icon-xiayishou-yuanshijituantubiao"></i>
             </p>
-            <p class="favorite flex Center">
+            <p @click="listenTogether" class="favorite flex Center">
               <i :class="['iconfont', favoriteCls]"></i>
             </p>
           </div>
@@ -905,6 +905,7 @@ export default {
     open() {
       this.setFullScreen(true);
     },
+    //发起分享链接后再调用这个
     initSignalR() {
       //signalR接收Serve端的数据
       var _this = this;
@@ -1008,6 +1009,10 @@ export default {
     myTest() {
       console.log("hello in myTest");
     },
+    listenTogether(){
+      console.log('调用后端接口，发起一起听~')
+
+    }
   },
 };
 </script>
