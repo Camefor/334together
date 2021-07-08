@@ -35,6 +35,7 @@ using Xhznl.HelloAbp.MultiTenancy;
 using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.AspNetCore.SignalR;
 using Xhznl.HelloAbp.SignalR;
+using Volo.Abp.Caching;
 
 namespace Xhznl.HelloAbp
 {
@@ -49,6 +50,7 @@ namespace Xhznl.HelloAbp
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpBlobStoringFileSystemModule),
+                typeof(AbpCachingModule),
             typeof(AbpAspNetCoreSignalRModule) //Add the new module dependency
 
     )]
@@ -198,7 +200,8 @@ namespace Xhznl.HelloAbp
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
                     options.ApiName = "HelloAbp";
-                    options.JwtBackChannelHandler = new HttpClientHandler() {
+                    options.JwtBackChannelHandler = new HttpClientHandler()
+                    {
                         ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                     };
                 });
@@ -227,7 +230,8 @@ namespace Xhznl.HelloAbp
                             Array.Empty<string>()
                         }
                     });
-                    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme() {
+                    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme()
+                    {
                         Name = "Authorization",
                         In = ParameterLocation.Header,
                         Type = SecuritySchemeType.ApiKey

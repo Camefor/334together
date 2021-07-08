@@ -7,6 +7,9 @@ namespace Xhznl.HelloAbp.Music
     public class ListenTogetherDto
     {
 
+        public string RoomId { get; set; }
+        public string InviteId { get; set; }
+
         /// <summary>
         /// 指令类型
         /// </summary>
