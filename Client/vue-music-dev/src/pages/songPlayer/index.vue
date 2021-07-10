@@ -1017,6 +1017,7 @@ export default {
       var param = {
         ConnectedId: _this.signalr.connectionId,
         UserAgent: "hahhh",
+        NickName:'我是一个用户'
       };
       $.ajax({
         url,

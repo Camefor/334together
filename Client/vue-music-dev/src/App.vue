@@ -35,32 +35,38 @@ export default {
       navList: [
         {
           label: "歌手",
-          name: "singer"
+          name: "singer",
           // link: '/singer'
         },
         {
           label: "歌单",
-          name: "songSheet"
+          name: "songSheet",
           // link: '/songSheet'
         },
         {
           label: "视频",
           name: "mv",
-          link: "/mv"
+          link: "/mv",
         },
         {
           label: "搜索",
           name: "search",
-          link: "/search"
-        }
-      ]
+          link: "/search",
+        },
+      ],
     };
+  },
+  mounted() {
+    console.log(
+      "%c 相信未来 ",
+      "background-image:-webkit-gradient( linear, left top,right top, color-stop(0, #00a419),color-stop(0.15, #f44336), color-stop(0.29, #ff4300),color-stop(0.3, #AA00FF),color-stop(0.4, #8BC34A), color-stop(0.45, #607D8B),color-stop(0.6, #4096EE), color-stop(0.75, #D50000),color-stop(0.9, #4096EE), color-stop(1, #FF1A00));color:transparent;-webkit-background-clip:text;font-size:30px;#1a1a1a;color:black;"
+    );
   },
   computed: {
     zIndex() {
       return this.$route.name
         ? {
-            zIndex: this.$route.matched[0].meta.index
+            zIndex: this.$route.matched[0].meta.index,
           }
         : {};
     },
@@ -70,16 +76,16 @@ export default {
     fullScreenFixed() {
       var matchRoutes = this.$route.matched;
       return matchRoutes[0] && matchRoutes[0].meta.fullScreenFixed;
-    }
+    },
   },
   watch: {
-    $route: function(to, from) {
+    $route: function (to, from) {
       if (!to.name || !from.name) {
         return;
       }
       this.oldRoute = from;
       this.setTransitionName(to, from);
-    }
+    },
   },
   components: { SongPlayer },
   methods: {
@@ -119,11 +125,11 @@ export default {
     initPlay() {
       $("audio")[0]
         .play()
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped lang="less">

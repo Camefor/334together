@@ -47,7 +47,8 @@ namespace Xhznl.HelloAbp.Controllers
                     CreateConnectedId = user.ConnectedId,
                     RoomId = roomId,
                     InviteId = inviteId,
-                    OnlineUsers = new List<OnlineUser> { new OnlineUser { ConnectedId = user.ConnectedId } }
+                    OnlineUsers = new List<OnlineUser> {
+                        new OnlineUser { ConnectedId = user.ConnectedId ,NickName = user.NickName} }
                 };
                 onlineRoomsInCache.Add(room);
                 _cache.Set(CacheKeyCollection._cacheKey_online_room, onlineRoomsInCache);
