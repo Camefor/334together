@@ -20,10 +20,21 @@ namespace Xhznl.HelloAbp.Controllers
             _cache = cache;
         }
 
+        /// <summary>
+        /// 发起一起听请求
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public IActionResult CreateRoom(OnlineUser user)
         {
             try
             {
+                if (user?.ConnectedId is null)
+                {
+                    //return NotFound();
+                    return Json(new { code = 500 });
+                }
+
                 var onlineRoomsInCache = _cache.Get(CacheKeyCollection._cacheKey_online_room);
                 if (onlineRoomsInCache == null)
                 {
@@ -33,6 +44,7 @@ namespace Xhznl.HelloAbp.Controllers
                 var inviteId = Guid.NewGuid().ToString().Substring(0, 12);
                 var room = new OnlineRoom
                 {
+                    CreateConnectedId = user.ConnectedId,
                     RoomId = roomId,
                     InviteId = inviteId,
                     OnlineUsers = new List<OnlineUser> { new OnlineUser { ConnectedId = user.ConnectedId } }
@@ -46,5 +58,12 @@ namespace Xhznl.HelloAbp.Controllers
                 return Json(new { code = 500 });
             }
         }
+
+        public IActionResult GetAllRoom()
+        {
+            var roomsInCache = _cache.Get(CacheKeyCollection._cacheKey_online_room);
+            return Json(roomsInCache);
+        }
+
     }
 }

@@ -257,6 +257,7 @@ import playMode from "@/common/js/config";
 import { shuffle } from "@/common/js/util";
 import lyricParser from "lyric-parser";
 import { prefixStyle } from "@/config/dom";
+import $ from "zepto";
 
 const filter = prefixStyle("filter");
 const transitionDuration = prefixStyle("transition-duration");
@@ -954,7 +955,7 @@ export default {
             _this.songReady = false;
             break;
 
-                case "clearList": //清空播放列表
+          case "clearList": //清空播放列表
             try {
               _this.deleteSongList();
               _this.hide();
@@ -998,8 +999,8 @@ export default {
         object.val = true;
         var jsonPar = JSON.stringify(object);
         _this.signalr.invoke("SendMessageInSongPlayIndex", jsonPar);
-      }else{
-        console.error('他喵的，服务器连接失败啦!');
+      } else {
+        console.error("他喵的，服务器连接失败啦!");
       }
       // //object为对象类型,如果可用。再序列化为json 字符串。
       // //object对象其中要包括actionType属性，代表指令标识。 比如开始、暂停当前播放，切歌 等等
@@ -1009,10 +1010,31 @@ export default {
     myTest() {
       console.log("hello in myTest");
     },
-    listenTogether(){
-      console.log('调用后端接口，发起一起听~')
-
-    }
+    async listenTogether() {
+      var _this = this;
+      console.log("调用后端接口，发起一起听~");
+      var url = "http://localhost:44370/music/createRoom";
+      var param = {
+        ConnectedId: _this.signalr.connectionId,
+        UserAgent: "hahhh",
+      };
+      $.ajax({
+        url,
+        method: "post",
+        data: param,
+        // dataType: "text",
+        success(res) {
+          console.log(res);
+          if (res.code == 200) {
+            console.log(res.inviteId);
+            console.log(res.roomId);
+          }
+        },
+        error(xhr, errType, err) {
+          console.error(errType);
+        },
+      });
+    },
   },
 };
 </script>
