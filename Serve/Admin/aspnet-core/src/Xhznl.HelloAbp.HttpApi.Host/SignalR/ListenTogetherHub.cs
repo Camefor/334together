@@ -23,11 +23,14 @@ namespace Xhznl.HelloAbp.SignalR
 
 
         private readonly IDistributedCache<List<OnlineUser>> _cache;
+        private readonly IDistributedCache<List<OnlineRoom>> _cacheOnlineRoom;
 
 
-        public ListenTogetherHub(IDistributedCache<List<OnlineUser>> cache)
+        public ListenTogetherHub(IDistributedCache<List<OnlineUser>> cache,
+            IDistributedCache<List<OnlineRoom>> cacheOnlineRoom)
         {
             _cache = cache;
+            _cacheOnlineRoom = cacheOnlineRoom;
         }
 
         public override Task OnConnectedAsync()
@@ -45,6 +48,21 @@ namespace Xhznl.HelloAbp.SignalR
             return base.OnDisconnectedAsync(exception);
         }
 
+
+        /// <summary>
+        /// 接受一起听邀请的用户进入页面了 就发起通知给 邀请人 ，告诉 或者直接把当前连接的用户返回给这个房间里的所有人
+        /// </summary>
+        /// <returns></returns>
+        public async Task SendMessageForNoticeUserConnected(string ajsonParameter)
+        {
+            var requestParameter = ajsonParameter.ToObject<ListenTogetherDto>();
+            var onlineRoomsInCache = _cacheOnlineRoom.Get(CacheKeyCollection._cacheKey_online_room);
+            var targetRoom = onlineRoomsInCache.Where(c => c.RoomId == requestParameter.RoomId).FirstOrDefault();
+            var response = targetRoom.OnlineUsers;
+            var connectedIds = targetRoom.OnlineUsers.Select(_ => _.ConnectedId).ToList();
+            var clientProxy = Clients.Clients(connectedIds);
+            await clientProxy.SendAsync("NoticeUserConnected", System.Text.Json.JsonSerializer.Serialize(response));
+        }
 
 
         /// <summary>
@@ -94,6 +112,7 @@ namespace Xhznl.HelloAbp.SignalR
             };//copy object
             var clientProxy = Clients.AllExcept(requestParameter.connectionId);//不给自己发
             await clientProxy.SendAsync("SignalRSendForPlayList", System.Text.Json.JsonSerializer.Serialize(response));
+
         }
 
 

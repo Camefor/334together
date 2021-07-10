@@ -253,6 +253,8 @@ import Animation from "create-keyframe-animation";
 import playerControls from "./play-control.js";
 import mixin from "./mixin.js";
 import playMode from "@/common/js/config";
+import { getUrlKey } from "@/config/util";
+
 // import signalRMusic from "@/common/js/signalRMusic";//决定又不封装了
 import { shuffle } from "@/common/js/util";
 import lyricParser from "lyric-parser";
@@ -322,7 +324,22 @@ export default {
   created() {
     this.initialed = false;
     this.touch = { blur: 40 };
-    this.initSignalR();
+
+    //接受一起听邀请的用户进入页面：
+    var roomId = getUrlKey("roomId", window.location.href); //&roomId=12121&inviteId=1211
+    var inviteId = getUrlKey("inviteId", window.location.href);
+    if (roomId && inviteId) {
+      sessionStorage.setItem("roomId", roomId);
+      sessionStorage.setItem("inviteId", inviteId);
+      if (
+        this.signalr.connectionState == "Connected" &&
+        this.signalr.connectionStarted
+      ) {
+        this.invokeSignalRServe();
+      } else {
+        //未连接到signalR服务器
+      }
+    }
   },
 
   mounted() {
@@ -907,7 +924,9 @@ export default {
       this.setFullScreen(true);
     },
     //发起分享链接后再调用这个
+    //另一可调用情况是 进入页面 url参数中已经存在有效的roomId 和 invalid
     initSignalR() {
+      console.log("开始接收服务端发来的指令");
       //signalR接收Serve端的数据
       var _this = this;
       _this.signalr.off("SignalRSendForSongPlayIndex");
@@ -989,18 +1008,25 @@ export default {
 
     /*调用后端方法 SignalR Serve 传入参数*/
     invokeSignalRServe(object) {
-      //检查signalR连接状态
-      if (
-        this.signalr.connectionState == "Connected" &&
-        this.signalr.connectionStarted
-      ) {
-        var _this = this;
-        object.connectionId = _this.signalr.connectionId;
-        object.val = true;
-        var jsonPar = JSON.stringify(object);
-        _this.signalr.invoke("SendMessageInSongPlayIndex", jsonPar);
-      } else {
-        console.error("他喵的，服务器连接失败啦!");
+      //检查是否已经与其他客户端建立了房间
+      var _roomId = sessionStorage.getItem("roomId"); //返回键名(key)对应的值(value)。若没有返回null。
+      if (_roomId) {
+        //检查signalR连接状态
+        if (
+          this.signalr.connectionState == "Connected" &&
+          this.signalr.connectionStarted
+        ) {
+          var _this = this;
+          object.connectionId = _this.signalr.connectionId;
+          object.val = true;
+          var jsonPar = JSON.stringify(object);
+          _this.signalr.invoke("SendMessageInSongPlayIndex", jsonPar);
+        } else {
+          console.error("他喵的，服务器连接失败啦!");
+        }
+      } //end if _roomId
+      else {
+        console.info("未加入任何听歌房间呢!");
       }
       // //object为对象类型,如果可用。再序列化为json 字符串。
       // //object对象其中要包括actionType属性，代表指令标识。 比如开始、暂停当前播放，切歌 等等
@@ -1017,7 +1043,7 @@ export default {
       var param = {
         ConnectedId: _this.signalr.connectionId,
         UserAgent: "hahhh",
-        NickName:'我是一个用户'
+        NickName: "我是一个用户",
       };
       $.ajax({
         url,
@@ -1027,8 +1053,10 @@ export default {
         success(res) {
           console.log(res);
           if (res.code == 200) {
-            console.log(res.inviteId);
-            console.log(res.roomId);
+            _this.initSignalR(); //另一可调用情况是 进入页面 url参数中已经存在有效的roomId 和 invalid
+
+            sessionStorage.setItem("inviteId", res.inviteId);
+            sessionStorage.setItem("roomId", res.roomId);
           }
         },
         error(xhr, errType, err) {

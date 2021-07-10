@@ -236,7 +236,7 @@ export default {
         console.log(object);
         this.signalr.invoke("SendMessageInPlayList", jsonPar);
       } else {
-        console.error("他喵的，服务器连接失败啦!");
+        // console.error("他喵的，服务器连接失败啦!");
       }
     },
   },
