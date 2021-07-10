@@ -56,13 +56,16 @@ namespace Xhznl.HelloAbp.SignalR
         public async Task SendMessageForNoticeUserConnected(string ajsonParameter)
         {
             var requestParameter = ajsonParameter.ToObject<ListenTogetherDto>();
-            var onlineRoomsInCache = _cacheOnlineRoom.Get(CacheKeyCollection._cacheKey_online_room);
-            var targetRoom = onlineRoomsInCache.Where(c => c.RoomId == requestParameter.RoomId).FirstOrDefault();
-            var response = targetRoom.OnlineUsers;
-            var connectedIds = targetRoom.OnlineUsers.Select(_ => _.ConnectedId).ToList();
+            var data = GetRoomData(requestParameter.RoomId);
+            var connectedIds = data.Item1;
+            connectedIds.Remove(requestParameter.connectionId);//不给自己发
+            var response = data.Item2;
             var clientProxy = Clients.Clients(connectedIds);
             await clientProxy.SendAsync("NoticeUserConnected", System.Text.Json.JsonSerializer.Serialize(response));
         }
+
+
+
 
 
         /// <summary>
@@ -73,26 +76,12 @@ namespace Xhznl.HelloAbp.SignalR
         public async Task SendMessageInSongPlayIndex(string ajsonParameter)
         {
             var requestParameter = ajsonParameter.ToObject<ListenTogetherDto>();
-
-            //记录第一次请求的id 返回的响应不给他了
-            var response = new ListenTogetherDto
-            {
-                funcName = requestParameter.funcName,
-                actionType = requestParameter.actionType,
-                currentTime = requestParameter.currentTime,
-                newSong = requestParameter.newSong,
-                index = requestParameter.index,
-                list = requestParameter.list
-            };//copy object
-
-
-            //to do:
-
-
-            var clientProxy = Clients.AllExcept(requestParameter.connectionId);//不给自己发
-
+            var data = GetRoomData(requestParameter.RoomId);
+            var connectedIds = data.Item1;
+            connectedIds.Remove(requestParameter.connectionId);//不给自己发
+            var response = CreateResponseToClient(requestParameter);
+            var clientProxy = Clients.Clients(connectedIds);
             await clientProxy.SendAsync("SignalRSendForSongPlayIndex", System.Text.Json.JsonSerializer.Serialize(response));
-
 
         }
 
@@ -100,7 +89,35 @@ namespace Xhznl.HelloAbp.SignalR
         {
             var requestParameter = ajsonParameter.ToObject<ListenTogetherDto>();
             //记录第一次请求的id 返回的响应不给他了
-            var response = new ListenTogetherDto
+            ListenTogetherDto response = CreateResponseToClient(requestParameter);
+            var clientProxy = Clients.AllExcept(requestParameter.connectionId);//不给自己发
+            await clientProxy.SendAsync("SignalRSendForPlayList", System.Text.Json.JsonSerializer.Serialize(response));
+
+        }
+
+
+
+
+        #region "提取方法"
+
+        /// <summary>
+        /// 获取房间的数据
+        /// </summary>
+        /// <param name="aroomId"></param>
+        /// <returns></returns>
+        private Tuple<List<string>, List<OnlineUser>> GetRoomData(string aroomId)
+        {
+            var onlineRoomsInCache = _cacheOnlineRoom.Get(CacheKeyCollection._cacheKey_online_room);
+            var targetRoom = onlineRoomsInCache.Where(c => c.RoomId == aroomId).FirstOrDefault();
+            var connectedIds = targetRoom.OnlineUsers.Select(_ => _.ConnectedId).ToList();
+            var response = targetRoom.OnlineUsers;
+            return Tuple.Create(connectedIds, response);
+        }
+
+
+        private static ListenTogetherDto CreateResponseToClient(ListenTogetherDto requestParameter)
+        {
+            return new ListenTogetherDto
             {
                 funcName = requestParameter.funcName,
                 actionType = requestParameter.actionType,
@@ -109,15 +126,10 @@ namespace Xhznl.HelloAbp.SignalR
                 index = requestParameter.index,
                 list = requestParameter.list,
                 mode = requestParameter.mode
-            };//copy object
-            var clientProxy = Clients.AllExcept(requestParameter.connectionId);//不给自己发
-            await clientProxy.SendAsync("SignalRSendForPlayList", System.Text.Json.JsonSerializer.Serialize(response));
-
+            };
+            //copy object
         }
 
-
-
-        #region "提取方法"
 
         private void DeleteOnlineUser()
         {

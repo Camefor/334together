@@ -1009,7 +1009,8 @@ export default {
     /*调用后端方法 SignalR Serve 传入参数*/
     invokeSignalRServe(object) {
       //检查是否已经与其他客户端建立了房间
-      var _roomId = sessionStorage.getItem("roomId"); //返回键名(key)对应的值(value)。若没有返回null。
+      var _roomId = sessionStorage.getItem("roomId");
+      var _inviteId = sessionStorage.getItem("inviteId");
       if (_roomId) {
         //检查signalR连接状态
         if (
@@ -1017,6 +1018,10 @@ export default {
           this.signalr.connectionStarted
         ) {
           var _this = this;
+
+          object.connectionId = _this.signalr.connectionId;
+          object.roomId = _roomId;
+          object.inviteId = _inviteId;
           object.connectionId = _this.signalr.connectionId;
           object.val = true;
           var jsonPar = JSON.stringify(object);
@@ -1057,6 +1062,10 @@ export default {
 
             sessionStorage.setItem("inviteId", res.inviteId);
             sessionStorage.setItem("roomId", res.roomId);
+
+            var shareLink = window.location.href + "&roomId=" + res.roomId;
+            shareLink += "&inviteId=" + res.inviteId;
+            console.log('发送给她的分享链接:'+shareLink);
           }
         },
         error(xhr, errType, err) {
