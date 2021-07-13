@@ -25,6 +25,8 @@ import App from './App'
 import router from './router'
 import FastClick from 'fastclick'
 import VueLazyLoad from 'vue-lazyload'
+import layer from "layui-layer";
+
 
 // import Cube from 'cube-ui'
 import vueTap from 'v-tap'
@@ -32,8 +34,11 @@ import vueTap from 'v-tap'
 // 全局设置mixin
 import './common/mixins/global.js'
 import signalr from './common/js/signalR.js'
+import VueClipboard from 'vue-clipboard2'
 
+Vue.use(VueClipboard)
 
+Vue.use(layer)
 Vue.use(vueTap)
 Vue.use(signalr)
 
