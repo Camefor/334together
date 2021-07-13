@@ -33,11 +33,11 @@ export default {
       navbarHeight: 0,
       duration: 400,
       navList: [
-        {
-          label: "歌手",
-          name: "singer",
-          // link: '/singer'
-        },
+        // {
+        //   label: "歌手",
+        //   name: "singer",
+        //   // link: '/singer'
+        // },
         {
           label: "歌单",
           name: "songSheet",
