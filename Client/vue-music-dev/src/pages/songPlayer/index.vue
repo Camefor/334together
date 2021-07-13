@@ -1044,6 +1044,19 @@ export default {
     async listenTogether() {
       var _this = this;
       console.log("调用后端接口，发起一起听~");
+
+      //检查当前是否正在 “一起听”
+      var _roomId = sessionStorage.getItem("roomId");
+      var _inviteId = sessionStorage.getItem("inviteId");
+      if (!!_roomId) {
+        console.log("当前正在一起听歌中，无法重复!");
+        _this.Toast({
+          message: "正在一起听歌中，无法重复!",
+          duration: 3000,
+        });
+        return false;
+      }
+
       var url = "http://localhost:44370/music/createRoom";
       var param = {
         ConnectedId: _this.signalr.connectionId,
@@ -1065,7 +1078,7 @@ export default {
 
             var shareLink = window.location.href + "&roomId=" + res.roomId;
             shareLink += "&inviteId=" + res.inviteId;
-            console.log('发送给她的分享链接:'+shareLink);
+            console.log("发送给她的分享链接:" + shareLink);
           }
         },
         error(xhr, errType, err) {
