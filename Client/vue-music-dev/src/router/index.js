@@ -54,8 +54,7 @@ export default new Router({
     }
   },
   routes: [
-    { path: '*', redirect: '/singer' },
-
+    { path: '*', redirect: '/songSheet' },
     {
       path: '/songList',
       name: 'songList',

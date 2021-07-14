@@ -1079,6 +1079,10 @@ export default {
             var shareLink = window.location.href + "&roomId=" + res.roomId;
             shareLink += "&inviteId=" + res.inviteId;
             console.log("发送给她的分享链接:" + shareLink);
+
+            //生成短链接：
+
+            //生成短链接end
           }
         },
         error(xhr, errType, err) {
