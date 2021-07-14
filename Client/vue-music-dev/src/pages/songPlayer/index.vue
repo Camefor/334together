@@ -147,9 +147,23 @@
             <p @click="toggleNext" class="toggle-next">
               <i class="iconfont icon-xiayishou-yuanshijituantubiao"></i>
             </p>
-            <p @click="listenTogether" class="favorite flex Center">
+
+            <div v-show="isShowCopy" class="copyBox">
+              <el-button
+                class="ml10"
+                type="text"
+                size="medium"
+                v-clipboard:copy="shareLink"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError"
+              >
+                复制链接
+              </el-button>
+            </div>
+            <p v-show="isShowListen" @click="listenTogether">一起听</p>
+            <!-- <p @click="listenTogether" class="favorite flex Center">
               <i :class="['iconfont', favoriteCls]"></i>
-            </p>
+            </p> -->
           </div>
         </div>
         <!-- 声音提示 -->
@@ -260,6 +274,7 @@ import { shuffle } from "@/common/js/util";
 import lyricParser from "lyric-parser";
 import { prefixStyle } from "@/config/dom";
 import $ from "zepto";
+import clipboard from "@/common/js/copyDialog";
 
 const filter = prefixStyle("filter");
 const transitionDuration = prefixStyle("transition-duration");
@@ -286,6 +301,9 @@ export default {
       songReady: false,
       showProgressBar: false,
       isPlay: false,
+      shareLink: "",
+      isShowCopy: false,
+      isShowListen: true,
     };
   },
   components: {
@@ -1076,13 +1094,43 @@ export default {
             sessionStorage.setItem("inviteId", res.inviteId);
             sessionStorage.setItem("roomId", res.roomId);
 
-            var shareLink = window.location.href + "&roomId=" + res.roomId;
-            shareLink += "&inviteId=" + res.inviteId;
-            console.log("发送给她的分享链接:" + shareLink);
+            var _shareLink = window.location.href + "&roomId=" + res.roomId;
+            _shareLink += "&inviteId=" + res.inviteId;
+            console.log("发送给她的分享链接:" + _shareLink);
+            _this.shareLink = _shareLink;
 
+            _this.isShowListen = false;
+            _this.isShowCopy = true;
             //生成短链接：
 
             //生成短链接end
+
+            // layer.alert(
+            //   "邀请链接：请点击复制",
+            //   {
+            //     skin: "layui-layer-molv", //样式类名
+            //     closeBtn: 0,
+            //   },
+            //   function () {
+            //     console.log("click");
+            //   }
+            // );
+
+            // layer.confirm(
+            //   "点击复制邀请链接",
+            //   {
+            //     btn: ["好", "不好"], //按钮
+            //   },
+            //   function () {
+            //     this.clipboard('haha')
+            //   },
+            //   function () {
+            //     layer.msg("也可以这样", {
+            //       time: 20000, //20s后自动关闭
+            //       btn: ["明白了", "知道了"],
+            //     });
+            //   }
+            // );
           }
         },
         error(xhr, errType, err) {
@@ -1090,6 +1138,28 @@ export default {
         },
       });
     },
+
+    onCopy(e) {
+      // layer.msg("复制成功，去发给你想发的人吧");
+
+      layer.confirm(
+        "复制成功，去发给你想发的人吧",
+        {
+          btn: ["好", "不好"], //按钮
+        },
+        function () {
+        },
+        function () {
+         
+        }
+      );
+
+      this.isShowListen = true;
+      this.isShowCopy = false;
+      console.log(e);
+    },
+    // 复制失败
+    onError(e) {},
   },
 };
 </script>
