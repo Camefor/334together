@@ -160,7 +160,9 @@
                 复制链接
               </el-button>
             </div>
-            <p v-show="isShowListen" @click="listenTogether">一起听</p>
+            <p v-show="isShowListen" @click="listenTogether">
+              {{ ListenTogetherState }}
+            </p>
             <!-- <p @click="listenTogether" class="favorite flex Center">
               <i :class="['iconfont', favoriteCls]"></i>
             </p> -->
@@ -304,6 +306,7 @@ export default {
       shareLink: "",
       isShowCopy: false,
       isShowListen: true,
+      ListenTogetherState: "一起听",
     };
   },
   components: {
@@ -354,6 +357,7 @@ export default {
         this.signalr.connectionStarted
       ) {
         this.invokeSignalRServe();
+        this.ListenTogetherState = "正在一起听~";
       } else {
         //未连接到signalR服务器
       }
@@ -1068,10 +1072,25 @@ export default {
       var _inviteId = sessionStorage.getItem("inviteId");
       if (!!_roomId) {
         console.log("当前正在一起听歌中，无法重复!");
-        _this.Toast({
-          message: "正在一起听歌中，无法重复!",
-          duration: 3000,
-        });
+        // _this.Toast({
+        //   message: "正在一起听歌中，无法重复!",
+        //   duration: 3000,
+        // });
+        layer.confirm(
+          "正在一起听歌中，无法重复",
+          {
+            btn: ["继续听", "不听了"], //按钮
+          },
+          function () {
+            layer.msg("(*^◎^*)", { icon: 1 });
+          },
+          function () {
+            sessionStorage.removeItem("roomId");
+            sessionStorage.removeItem("inviteId");
+            layer.msg("哼╭(╯^╰)╮", { icon: 5 });
+          }
+        );
+
         return false;
       }
 
@@ -1096,41 +1115,15 @@ export default {
 
             var _shareLink = window.location.href + "&roomId=" + res.roomId;
             _shareLink += "&inviteId=" + res.inviteId;
-            console.log("发送给她的分享链接:" + _shareLink);
-            _this.shareLink = _shareLink;
 
-            _this.isShowListen = false;
-            _this.isShowCopy = true;
             //生成短链接：
-
             //生成短链接end
 
-            // layer.alert(
-            //   "邀请链接：请点击复制",
-            //   {
-            //     skin: "layui-layer-molv", //样式类名
-            //     closeBtn: 0,
-            //   },
-            //   function () {
-            //     console.log("click");
-            //   }
-            // );
-
-            // layer.confirm(
-            //   "点击复制邀请链接",
-            //   {
-            //     btn: ["好", "不好"], //按钮
-            //   },
-            //   function () {
-            //     this.clipboard('haha')
-            //   },
-            //   function () {
-            //     layer.msg("也可以这样", {
-            //       time: 20000, //20s后自动关闭
-            //       btn: ["明白了", "知道了"],
-            //     });
-            //   }
-            // );
+            console.log("发送给她的分享链接:" + _shareLink);
+            _this.shareLink = _shareLink;
+            _this.ListenTogetherState = "正在一起听~";
+            _this.isShowListen = false;
+            _this.isShowCopy = true;
           }
         },
         error(xhr, errType, err) {
@@ -1148,9 +1141,10 @@ export default {
           btn: ["好", "不好"], //按钮
         },
         function () {
+          layer.msg("去吧去吧(*^◎^*)", { icon: 1 });
         },
         function () {
-         
+          layer.msg("哼╭(╯^╰)╮", { icon: 5 });
         }
       );
 
