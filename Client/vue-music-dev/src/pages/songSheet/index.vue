@@ -64,14 +64,14 @@ export default {
     },
 
     async getCategoryData() {
-      var { code, data } = await this.__getJson(
-        `/getCategoryTags`
-      )
+      // var { code, data } = await this.__getJson(
+      //   `/getCategoryTags`
+      // )
     
-      if (code == 0) {
-        this.category = data.categories
-        this._formatCategory()
-      }
+      // if (code == 0) {
+      //   this.category = data.categories
+      //   this._formatCategory()
+      // }
     },
     async _formatCategory() {
       let num = 3

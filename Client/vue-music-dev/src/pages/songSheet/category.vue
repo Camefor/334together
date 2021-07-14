@@ -1,11 +1,11 @@
 <template>
   <div class="category">
-    <div class="pubTitle">
+    <!-- <div class="pubTitle">
       <span class="title-left">推荐分类</span>
       <router-link to="/categoryGroup" class="icon-arrow">
         <i class="cubeic-arrow icon-right-allCategory"></i>
       </router-link>
-    </div>
+    </div> -->
     <!-- content -->
     <div class="category-wrap">
       <div :key="item.id" @click="toDetail(item)" class="category-cell" v-for="item in category">
