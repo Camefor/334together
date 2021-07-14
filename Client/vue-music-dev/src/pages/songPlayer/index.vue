@@ -345,21 +345,27 @@ export default {
   created() {
     this.initialed = false;
     this.touch = { blur: 40 };
-
     //接受一起听邀请的用户进入页面：
     var roomId = getUrlKey("roomId", window.location.href); //&roomId=12121&inviteId=1211
     var inviteId = getUrlKey("inviteId", window.location.href);
     if (roomId && inviteId) {
       sessionStorage.setItem("roomId", roomId);
       sessionStorage.setItem("inviteId", inviteId);
+      this.ListenTogetherState = "正在一起听~";
       if (
-        this.signalr.connectionState == "Connected" &&
+        this.signalr.connectionState == "Connected" ||
         this.signalr.connectionStarted
       ) {
         this.invokeSignalRServe();
-        this.ListenTogetherState = "正在一起听~";
       } else {
         //未连接到signalR服务器
+      }
+    } else {
+      //已经存在历史的
+      var r = sessionStorage.getItem("roomId");
+      var i = sessionStorage.getItem("inviteId");
+      if (r) {
+        this.ListenTogetherState = "正在一起听~";
       }
     }
   },
@@ -1085,9 +1091,10 @@ export default {
             layer.msg("(*^◎^*)", { icon: 1 });
           },
           function () {
+            layer.msg("哼╭(╯^╰)╮", { icon: 5 });
             sessionStorage.removeItem("roomId");
             sessionStorage.removeItem("inviteId");
-            layer.msg("哼╭(╯^╰)╮", { icon: 5 });
+            _this.ListenTogetherState = "一起听~";
           }
         );
 
@@ -1109,12 +1116,26 @@ export default {
           console.log(res);
           if (res.code == 200) {
             _this.initSignalR(); //另一可调用情况是 进入页面 url参数中已经存在有效的roomId 和 invalid
-
             sessionStorage.setItem("inviteId", res.inviteId);
             sessionStorage.setItem("roomId", res.roomId);
 
-            var _shareLink = window.location.href + "&roomId=" + res.roomId;
-            _shareLink += "&inviteId=" + res.inviteId;
+            //设置 字符串前 要处理之前已经存在的 roomId 参数
+            var _shareLink = "";
+            var currentUrl = window.location.href;
+            var r = getUrlKey("roomId", currentUrl); //&roomId=12121&inviteId=1211
+            if (r) {
+              var url = new URL(currentUrl);
+              url.searchParams.set("roomId", res.roomId); // setting your param
+              url.searchParams.set("inviteId", res.inviteId); // setting your param
+              _shareLink = url.href;
+            } else {
+              _shareLink =
+                window.location.href +
+                "&roomId=" +
+                res.roomId +
+                "&inviteId=" +
+                res.inviteId;
+            }
 
             //生成短链接：
             //生成短链接end
@@ -1133,24 +1154,26 @@ export default {
     },
 
     onCopy(e) {
-      // layer.msg("复制成功，去发给你想发的人吧");
+      var _this = this;
+      layer.msg("复制成功，去发给你想发的人吧");
 
-      layer.confirm(
-        "复制成功，去发给你想发的人吧",
-        {
-          btn: ["好", "不好"], //按钮
-        },
-        function () {
-          layer.msg("去吧去吧(*^◎^*)", { icon: 1 });
-        },
-        function () {
-          layer.msg("哼╭(╯^╰)╮", { icon: 5 });
-        }
-      );
+      // layer.confirm(
+      //   "复制成功，去发给你想发的人吧",
+      //   {
+      //     btn: ["好", "不好"], //按钮
+      //   },
+      //   function () {
+      //     layer.msg("去吧去吧(*^◎^*)", { icon: 1 });
+      //   },
+      //   function () {
+      //     layer.msg("哼╭(╯^╰)╮", { icon: 5 });
+      //   }
+      // );
 
-      this.isShowListen = true;
-      this.isShowCopy = false;
+      _this.isShowListen = true;
+      _this.isShowCopy = false;
       console.log(e);
+      _this.shareLink = "";
     },
     // 复制失败
     onError(e) {},

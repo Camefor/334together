@@ -16,6 +16,7 @@ const signalr = function () {
 async function start() {
     try {
         await signal.start()
+        console.log(signal);
         console.log('serve connected')
         // console.log(signal)
         console.log('your  connectionId js ', signal.connectionId);
