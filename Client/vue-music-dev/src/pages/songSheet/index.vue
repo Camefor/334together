@@ -112,7 +112,7 @@ export default {
           },
         },
         {
-          dissid: "7677627835",
+          dissid: "7677627832",
           createtime: "2020-08-29",
           commit_time: "2020-08-29",
           dissname: "工体东路没有人(2009)",
@@ -132,7 +132,7 @@ export default {
           },
         },
         {
-          dissid: "7677627835",
+          dissid: "76776278125",
           createtime: "2020-08-29",
           commit_time: "2020-08-29",
           dissname: "二零零九年十月十六日事件(2009",
@@ -165,13 +165,13 @@ export default {
     },
 
     async getCategoryData() {
-      // var { code, data } = await this.__getJson(
-      //   `/getCategoryTags`
-      // )
-      // if (code == 0) {
-      //   this.category = data.categories
-      //   this._formatCategory()
-      // }
+      var { code, data } = await this.__getJson(
+        `/getCategoryTags`
+      )
+      if (code == 0) {
+        this.category = data.categories
+        this._formatCategory()
+      }
     },
     async _formatCategory() {
       let num = 3;

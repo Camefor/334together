@@ -343,31 +343,26 @@ export default {
     },
   },
   created() {
-    this.initialed = false;
-    this.touch = { blur: 40 };
+    var _this = this;
+    _this.initialed = false;
+    _this.touch = { blur: 40 };
     //接受一起听邀请的用户进入页面：
     var roomId = getUrlKey("roomId", window.location.href); //&roomId=12121&inviteId=1211
     var inviteId = getUrlKey("inviteId", window.location.href);
     if (roomId && inviteId) {
       sessionStorage.setItem("roomId", roomId);
       sessionStorage.setItem("inviteId", inviteId);
-      this.ListenTogetherState = "正在一起听~";
-      if (
-        this.signalr.connectionState == "Connected" ||
-        this.signalr.connectionStarted
-      ) {
-        this.invokeSignalRServe();
-      } else {
-        //未连接到signalR服务器
-      }
+      _this.ListenTogetherState = "正在一起听~";
     } else {
       //已经存在历史的
       var r = sessionStorage.getItem("roomId");
       var i = sessionStorage.getItem("inviteId");
       if (r) {
-        this.ListenTogetherState = "正在一起听~";
+        _this.ListenTogetherState = "正在一起听~";
       }
     }
+
+    _this.initSignalR();
   },
 
   mounted() {
@@ -831,6 +826,35 @@ export default {
 
       lyric = await this.currentSong.getLyric();
 
+      lyric = `[tool: 歌词滚动姬 https://lrc-maker.github.io]
+[ti: 黑色信封]
+[ar: 李志]
+[al: 梵高先生]
+[length: 04:47.295]
+[00:12.959] 黑色信封-李志
+[00:39.556] 一天晚上我的一个朋友悄悄的来看我
+[00:48.282] 他的眼睛像外面的月亮是忧郁的
+[00:57.266] 他抓起我桌上的那个苹果轻轻的咬了一口
+[01:05.516] 从上衣的口袋里掏出一个信封对我说
+[01:15.084] 他说这世界是不是我们的
+[01:19.632] 我应该穿什么吃什么
+[01:23.096] 如果没有人看着我
+[01:26.893] 那该多快乐
+[01:32.807] 他说这世界不该是我们的
+[01:37.320] 爸爸妈妈也不该有的
+[01:41.670] 我可是个男人为什么打不起精神
+[02:30.448] 一些天像过去那样平淡的过去了
+[02:39.140] 在同样的一个夜晚那个朋友打来电话
+[02:48.419] 他说他在一个陌生的地方一个人唱着歌
+[02:56.965] 我看着他留下的那个信封想起他说的话
+[03:06.283] 他说这世界是不是我们的
+[03:10.154] 我应该穿什么吃什么
+[03:14.177] 如果没有人看着我
+[03:18.241] 那该多快乐
+[03:23.843] 他说这世界不该是我们的
+[03:28.113] 爸爸妈妈也不该有的
+[03:32.383] 我可是个男人为什么打不起精神`;
+
       this.currentLyric = new lyricParser(lyric, this.handleLyric);
 
       if (this.currentLyric.lines.length > 0) {
@@ -957,7 +981,7 @@ export default {
       console.log("开始接收服务端发来的指令");
       //signalR接收Serve端的数据
       var _this = this;
-      _this.signalr.off("SignalRSendForSongPlayIndex");
+      // _this.signalr.off("SignalRSendForSongPlayIndex");
       _this.signalr.on("SignalRSendForSongPlayIndex", (data) => {
         console.log("signalr 来了,开始处理指令");
         var res = JSON.parse(data);
@@ -1053,6 +1077,7 @@ export default {
           object.connectionId = _this.signalr.connectionId;
           object.val = true;
           var jsonPar = JSON.stringify(object);
+          console.log(object);
           _this.signalr.invoke("SendMessageInSongPlayIndex", jsonPar);
         } else {
           console.error("他喵的，服务器连接失败啦!");
@@ -1107,6 +1132,17 @@ export default {
         UserAgent: "hahhh",
         NickName: "我是一个用户",
       };
+
+      // $.ajax({
+      // "",
+      // method:"post",
+      // data:"",
+      // success(res){},
+      //  error(xhr, errType, err) {
+      //           console.error(errType);
+      //         },
+      // });
+
       $.ajax({
         url,
         method: "post",
@@ -1177,6 +1213,33 @@ export default {
     },
     // 复制失败
     onError(e) {},
+
+    acceptListen() {
+      var _this = this;
+      var url = "http://localhost:44370/music/acceptListen";
+      var r = sessionStorage.getItem("roomId");
+      var i = sessionStorage.getItem("inviteId");
+      console.log(_this.signalr);
+      var param = {
+        ConnectedId: _this.signalr.connectionId,
+        UserAgent: "hahhh",
+        NickName: "我是一个用户2",
+        RoomId: r,
+        InviteId: i,
+      };
+
+      $.ajax({
+        url,
+        method: "post",
+        data: param,
+        success(res) {
+          console.log(res);
+        },
+        error(xhr, errType, err) {
+          console.error(errType);
+        },
+      });
+    },
   },
 };
 </script>

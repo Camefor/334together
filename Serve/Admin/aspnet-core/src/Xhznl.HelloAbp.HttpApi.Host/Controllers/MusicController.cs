@@ -60,10 +60,49 @@ namespace Xhznl.HelloAbp.Controllers
             }
         }
 
+
+        /// <summary>
+        /// 接受一起听请求,
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult AcceptListen(OnlineUser user)
+        {
+            try
+            {
+                var onlineRoomsInCache = _cache.Get(CacheKeyCollection._cacheKey_online_room);
+                var targetRoom = onlineRoomsInCache.Where(c => c.RoomId == user.RoomId).FirstOrDefault();
+                if (targetRoom == null)
+                {
+                    return Json(new { code = 500 });
+                }
+                targetRoom.OnlineUsers.Add(new OnlineUser
+                {
+                    ConnectedId = user.ConnectedId,
+                    NickName = user.NickName,
+                    UserAgent = user.UserAgent
+                });
+                //onlineRoomsInCache.ReplaceOne(c => c.RoomId == user.RoomId, targetRoom);
+                //update room data
+                _cache.Set(CacheKeyCollection._cacheKey_online_room, onlineRoomsInCache);
+                return Json(new { code = 200, msg = "加入房间成功", targetRoom });
+            }
+            catch (Exception)
+            {
+                return Json(new { code = 500 });
+            }
+        }
+
+
         public IActionResult GetAllRoom()
         {
             var roomsInCache = _cache.Get(CacheKeyCollection._cacheKey_online_room);
             return Json(roomsInCache);
+        }
+
+        public IActionResult ClearAllRoom()
+        {
+            _cache.Remove(CacheKeyCollection._cacheKey_online_room);
+            return Content("ok");
         }
 
     }

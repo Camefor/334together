@@ -12,5 +12,8 @@ namespace Xhznl.HelloAbp.Music.SignalR
 
         public string NickName { get; set; }
 
+        public string RoomId { get; set; }
+        public string InviteId { get; set; }
+
     }
 }
