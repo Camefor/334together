@@ -17,7 +17,7 @@
         <mt-button icon="more" slot="right"></mt-button>
       </mt-header>
       <!-- 背景图片 -->
-      <div class="themePic" v-lazy:background-image="$route.query.imgurl">
+      <div class="themePic" v-lazy:background-image="$route.query.imgUrl">
         <div v-show="Math.abs(scrollY) < picHeight - reserved" class="playBtn">
           <!-- <mt-button class="mt-button-play" :light="true" :primary="true" :outline="true">播放全部</mt-button> -->
         </div>
