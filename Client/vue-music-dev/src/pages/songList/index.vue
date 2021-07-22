@@ -174,7 +174,29 @@ export default {
           },
           purl: "https://2019334.xyz/share/cover/1.jpg",
 
-          songid: 268293598,
+          songid: 666,
+          songmid: "002e587r1xLABu",
+          albummid: "0026EB5y05nZq1",
+          albumid: 11537813,
+          singer: [
+            {
+              id: 3398615,
+              mid: "0032raW44KlFoY",
+              name: "李志",
+            },
+          ],
+          url: "https://2019334.xyz/share/6.%E6%88%91%E7%88%B1%E5%8D%97%E4%BA%AC%282009%29/%E7%AC%AC1%E5%BC%A0/05%20%E5%A4%A9%E7%A9%BA%E4%B9%8B%E5%9F%8E.mp3",
+          songname: "天空之城",
+        },
+        {
+          picurl: {
+            src: "https://2019334.xyz/share/cover/1.jpg",
+            error:
+              "https://y.gtimg.cn/music/photo_new/T001R300x300M0000032raW44KlFoY.jpg",
+          },
+          purl: "https://2019334.xyz/share/cover/1.jpg",
+
+          songid: 10001,
           songmid: "002e587r1xLABu",
           albummid: "0026EB5y05nZq1",
           albumid: 11537813,
@@ -190,34 +212,69 @@ export default {
         },
         {
           picurl: {
-            src: "https://y.gtimg.cn/music/photo_new/T002R300x300M000001qgYSw0bxB9h.jpg?max_age=2592000",
+            src: "https://2019334.xyz/share/cover/1.jpg",
             error:
-              "https://y.gtimg.cn/music/photo_new/T001R300x300M000002Q5QT42dAf5f.jpg",
+              "https://y.gtimg.cn/music/photo_new/T001R300x300M0000032raW44KlFoY.jpg",
           },
-          purl: "C400002H8Sxx4Pv2xk.m4a?guid=5165714425&vkey=9FC0E5A31EC331A55352796BB921E0871DAA4138C31D19809282560697C8147834DA10A2CAC0E3C62084702E9F6495C1CC1DBDF8CC8D7FF4&uin=&fromtag=38",
-          songid: 269235051,
-          songmid: "002H8Sxx4Pv2xk",
-          albummid: "001qgYSw0bxB9h",
-          albumid: 13074410,
+          purl: "https://2019334.xyz/share/cover/1.jpg",
+
+          songid: 10002,
+          songmid: "002e587r1xLABu",
+          albummid: "0026EB5y05nZq1",
+          albumid: 11537813,
           singer: [
             {
-              id: 3087545,
-              mid: "002Q5QT42dAf5f",
-              name: "镜予歌",
-            },
-            {
-              id: 2641977,
-              mid: "002oe3992BnoEQ",
-              name: "喧笑",
-            },
-            {
-              id: 2628966,
-              mid: "003mfi4h3svTUT",
-              name: "陈亦洺",
+              id: 3398615,
+              mid: "0032raW44KlFoY",
+              name: "李志",
             },
           ],
-          url: "http://dl.stream.qqmusic.qq.com/C400002H8Sxx4Pv2xk.m4a?guid=5165714425&vkey=9FC0E5A31EC331A55352796BB921E0871DAA4138C31D19809282560697C8147834DA10A2CAC0E3C62084702E9F6495C1CC1DBDF8CC8D7FF4&uin=&fromtag=38",
-          songname: "晚夜微雨问海棠 (剧情版)",
+          url: "https://2019334.xyz/share/1.%20%E8%A2%AB%E7%A6%81%E5%BF%8C%E7%9A%84%E6%B8%B8%E6%88%8F%282004%29/02青春.mp3",
+          songname: "青春",
+        },
+        {
+          picurl: {
+            src: "https://2019334.xyz/share/cover/1.jpg",
+            error:
+              "https://y.gtimg.cn/music/photo_new/T001R300x300M0000032raW44KlFoY.jpg",
+          },
+          purl: "https://2019334.xyz/share/cover/1.jpg",
+
+          songid: 10003,
+          songmid: "002e587r1xLABu",
+          albummid: "0026EB5y05nZq1",
+          albumid: 11537813,
+          singer: [
+            {
+              id: 3398615,
+              mid: "0032raW44KlFoY",
+              name: "李志",
+            },
+          ],
+          url: "https://2019334.xyz/share/1.%20%E8%A2%AB%E7%A6%81%E5%BF%8C%E7%9A%84%E6%B8%B8%E6%88%8F%282004%29/03阿兰.mp3",
+          songname: "阿兰",
+        },
+        {
+          picurl: {
+            src: "https://2019334.xyz/share/cover/1.jpg",
+            error:
+              "https://y.gtimg.cn/music/photo_new/T001R300x300M0000032raW44KlFoY.jpg",
+          },
+          purl: "https://2019334.xyz/share/cover/1.jpg",
+
+          songid: 10004,
+          songmid: "002e587r1xLABu",
+          albummid: "0026EB5y05nZq1",
+          albumid: 11537813,
+          singer: [
+            {
+              id: 3398615,
+              mid: "0032raW44KlFoY",
+              name: "李志",
+            },
+          ],
+          url: "https://2019334.xyz/share/1.%20%E8%A2%AB%E7%A6%81%E5%BF%8C%E7%9A%84%E6%B8%B8%E6%88%8F%282004%29/04离婚.mp3",
+          songname: "离婚",
         },
       ];
 

@@ -7,6 +7,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Repositories;
 using Xhznl.HelloAbp.Music.SignalR;
+using System.Linq;
 
 namespace Xhznl.HelloAbp.Music
 {
@@ -34,19 +35,17 @@ namespace Xhznl.HelloAbp.Music
         }
 
 
-        public override Task<PagedResultDto<SongSheetDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        public async override Task<PagedResultDto<SongSheetDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            var onlineUserInCache = _cache.Get(_cacheKey);
-
-            var onlineUser = new OnlineUser {
-                ConnectedId = "sdjklwrje34",
-                NickName = "小红" + DateTime.Now.ToString()
-            };
-            _cache.Set(_cacheKey, onlineUser);
-
-            var onlineUserInCache2 = _cache.Get(_cacheKey);
-
-            return base.GetListAsync(input);
+            var res = await base.GetListAsync(input);
+            res.Items.ToList().ForEach(c =>
+            {
+                c.creator = new Creator
+                {
+                    name ="李志"
+                };
+            });
+            return res;
         }
 
         public void TestSet(string key, OnlineUser onlineUser)
@@ -56,7 +55,8 @@ namespace Xhznl.HelloAbp.Music
 
         private OnlineUser GetBookFromDatabaseAsync()
         {
-            return new OnlineUser {
+            return new OnlineUser
+            {
                 ConnectedId = "sdjklwrje34",
                 NickName = "小红"
             };

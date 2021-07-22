@@ -21,5 +21,23 @@ namespace Xhznl.HelloAbp.Music
         public string ListenNum { get; set; }
         public double Score { get; set; }
         public double Version { get; set; }
+
+        public Creator creator { get; set; }
+    }
+
+    public class Creator
+    {
+        public int type { get; set; }
+
+        public int qq { get; set; }
+
+        public string encrypt_uin { get; set; }
+
+        public string name { get; set; }
+
+        public int isVip { get; set; }
+        public string avatarUrl { get; set; }
+        public int followflag { get; set; }
+
     }
 }

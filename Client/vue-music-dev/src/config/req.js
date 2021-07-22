@@ -19,6 +19,23 @@ function __getJson(url, option = {}) {
   });
 }
 
+function getJson(url) {
+  // debugger
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: url,
+      dataType: "json",
+      method: "get",
+      success(_res) {
+        resolve(_res);
+      },
+      error(xhr, errType, err) {
+        reject(errType);
+      }
+    });
+  });
+}
+
 function __get(url, option = {}) {
   // debugger
   return new Promise((resolve, reject) => {
@@ -63,6 +80,6 @@ function __jsonp(url, option = {}) {
 export default {
   __getJson,
   __jsonp,
-
+  getJson,
   __get
 };

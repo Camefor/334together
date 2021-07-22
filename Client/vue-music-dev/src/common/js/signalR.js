@@ -55,29 +55,29 @@ async function start() {
 
         var roomId = getUrlKey("roomId", window.location.href); //&roomId=12121&inviteId=1211
         var inviteId = getUrlKey("inviteId", window.location.href);
+        if (!!roomId) {
+            console.log(roomId);
+            var url = "http://localhost:44370/music/acceptListen";
+            var param = {
+                ConnectedId: signal.connectionId,
+                UserAgent: "hahhh",
+                NickName: "我是一个用户2",
+                RoomId: roomId,
+                InviteId: inviteId,
+            };
 
-        console.log(roomId);
-        var url = "http://localhost:44370/music/acceptListen";
-        var param = {
-            ConnectedId: signal.connectionId,
-            UserAgent: "hahhh",
-            NickName: "我是一个用户2",
-            RoomId: roomId,
-            InviteId: inviteId,
-        };
-
-        $.ajax({
-            url,
-            method: "post",
-            data: param,
-            success(res) {
-                console.log(res);
-            },
-            error(xhr, errType, err) {
-                console.error(errType);
-            },
-        });
-
+            $.ajax({
+                url,
+                method: "post",
+                data: param,
+                success(res) {
+                    console.log(res);
+                },
+                error(xhr, errType, err) {
+                    console.error(errType);
+                },
+            });
+        }
 
     } catch (err) {
         console.log(err)

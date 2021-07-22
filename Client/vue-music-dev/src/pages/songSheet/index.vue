@@ -54,7 +54,7 @@ export default {
         {
           dissid: "6960007429",
           createtime: "2020-03-08",
-          commit_time: "2020-03-08",
+          commitTime: "2020-03-08",
           dissname: " 被禁忌的游戏(2004)",
           imgurl: "https://2019334.xyz/share/cover/1.jpg",
           introduction: "",
@@ -71,106 +71,122 @@ export default {
             followflag: 0,
           },
         },
-        {
-          dissid: "7684071290",
-          createtime: "2020-08-19",
-          commit_time: "2020-08-19",
-          dissname: "梵高先生(2005)",
-          imgurl: "https://2019334.xyz/share/cover/2.jpg",
-          introduction: "",
-          listennum: 1212172,
-          score: 0,
-          version: 0,
-          creator: {
-            type: 0,
-            qq: 1131072037,
-            encrypt_uin: "oK6ioKnlowni7z**",
-            name: "李志",
-            isVip: 0,
-            avatarUrl: "",
-            followflag: 0,
-          },
-        },
-        {
-          dissid: "7677627835",
-          createtime: "2020-08-29",
-          commit_time: "2020-08-29",
-          dissname: "这个世界会好吗(2006)",
-          imgurl: "https://2019334.xyz/share/cover/3.jpg",
-          introduction: "",
-          listennum: 752555,
-          score: 0,
-          version: 0,
-          creator: {
-            type: 0,
-            qq: 2280371540,
-            encrypt_uin: "ow-FoeoloK4Pon**",
-            name: "李志",
-            isVip: 0,
-            avatarUrl: "",
-            followflag: 0,
-          },
-        },
-        {
-          dissid: "7677627832",
-          createtime: "2020-08-29",
-          commit_time: "2020-08-29",
-          dissname: "工体东路没有人(2009)",
-          imgurl: "https://2019334.xyz/share/cover/4.jpg",
-          introduction: "",
-          listennum: 752555,
-          score: 0,
-          version: 0,
-          creator: {
-            type: 0,
-            qq: 2280371540,
-            encrypt_uin: "ow-FoeoloK4Pon**",
-            name: "李志",
-            isVip: 0,
-            avatarUrl: "",
-            followflag: 0,
-          },
-        },
-        {
-          dissid: "76776278125",
-          createtime: "2020-08-29",
-          commit_time: "2020-08-29",
-          dissname: "二零零九年十月十六日事件(2009",
-          imgurl: "https://2019334.xyz/share/cover/5.jpg",
-          introduction: "",
-          listennum: 752555,
-          score: 0,
-          version: 0,
-          creator: {
-            type: 0,
-            qq: 2280371540,
-            encrypt_uin: "ow-FoeoloK4Pon**",
-            name: "李志",
-            isVip: 0,
-            avatarUrl: "",
-            followflag: 0,
-          },
-        },
+        // {
+        //   dissid: "7684071290",
+        //   createtime: "2020-08-19",
+        //   commitTime: "2020-08-19",
+        //   dissname: "梵高先生(2005)",
+        //   imgurl: "https://2019334.xyz/share/cover/2.jpg",
+        //   introduction: "",
+        //   listennum: 1212172,
+        //   score: 0,
+        //   version: 0,
+        //   creator: {
+        //     type: 0,
+        //     qq: 1131072037,
+        //     encrypt_uin: "oK6ioKnlowni7z**",
+        //     name: "李志",
+        //     isVip: 0,
+        //     avatarUrl: "",
+        //     followflag: 0,
+        //   },
+        // },
+        // {
+        //   dissid: "7677627835",
+        //   createtime: "2020-08-29",
+        //   commit_time: "2020-08-29",
+        //   dissname: "这个世界会好吗(2006)",
+        //   imgurl: "https://2019334.xyz/share/cover/3.jpg",
+        //   introduction: "",
+        //   listennum: 752555,
+        //   score: 0,
+        //   version: 0,
+        //   creator: {
+        //     type: 0,
+        //     qq: 2280371540,
+        //     encrypt_uin: "ow-FoeoloK4Pon**",
+        //     name: "李志",
+        //     isVip: 0,
+        //     avatarUrl: "",
+        //     followflag: 0,
+        //   },
+        // },
+        // {
+        //   dissid: "7677627832",
+        //   createtime: "2020-08-29",
+        //   commit_time: "2020-08-29",
+        //   dissname: "工体东路没有人(2009)",
+        //   imgurl: "https://2019334.xyz/share/cover/4.jpg",
+        //   introduction: "",
+        //   listennum: 752555,
+        //   score: 0,
+        //   version: 0,
+        //   creator: {
+        //     type: 0,
+        //     qq: 2280371540,
+        //     encrypt_uin: "ow-FoeoloK4Pon**",
+        //     name: "李志",
+        //     isVip: 0,
+        //     avatarUrl: "",
+        //     followflag: 0,
+        //   },
+        // },
+        // {
+        //   dissid: "76776278125",
+        //   createtime: "2020-08-29",
+        //   commit_time: "2020-08-29",
+        //   dissname: "二零零九年十月十六日事件(2009",
+        //   imgurl: "https://2019334.xyz/share/cover/5.jpg",
+        //   introduction: "",
+        //   listennum: 752555,
+        //   score: 0,
+        //   version: 0,
+        //   creator: {
+        //     type: 0,
+        //     qq: 2280371540,
+        //     encrypt_uin: "ow-FoeoloK4Pon**",
+        //     name: "李志",
+        //     isVip: 0,
+        //     avatarUrl: "",
+        //     followflag: 0,
+        //   },
+        // },
       ];
-      // let list = data.list;
-      let list = al;
+      let list = [];
+      $.ajax({
+        url: `http://localhost:44370/api/app/songSheet`,
+        dataType: "json",
+        method: "get",
+        async:false, 
+        success(_res) {
+          console.log(_res);
+          list = _res.items;
+        },
+        error(xhr, errType, err) {
+          layer.msg("哎呀，");
+        },
+      });
+
+      console.log(list);
       list.forEach((item) => {
         item.id = item.dissid;
       });
-      if (code == this.__QERR_OK) {
-        this.hotSongList.push(...list);
-        this.sin += 10;
-        this.ein += 10;
-      }
+      // list = al;
+      this.hotSongList.push(...list);
+      // if (code == this.__QERR_OK) {
+      //   this.hotSongList.push(...list);
+      //   this.sin += 10;
+      //   this.ein += 10;
+      // }
+
+      this.loading = false;
     },
 
     async getCategoryData() {
-      var { code, data } = await this.__getJson(
-        `/getCategoryTags`
-      )
+      var { code, data } = await this.__getJson(`/getCategoryTags`);
       if (code == 0) {
-        this.category = data.categories
-        this._formatCategory()
+        this.category = data.categories;
+        this._formatCategory();
       }
     },
     async _formatCategory() {

@@ -9,12 +9,12 @@
       ref="swipeItem"
     >
       <div>
-        <img class="icon" v-lazy="data.imgurl" />
+        <img class="icon" v-lazy="data.imgUrl" />
       </div>
       <div class="text">
         <h2 class="item-name" v-html="data.creator.name
 "></h2>
-        <p class="item-desc line2" v-html="data.dissname"></p>
+        <p class="item-desc line2" v-html="data.dissName"></p>
       </div>
     </router-link>
   </div>
