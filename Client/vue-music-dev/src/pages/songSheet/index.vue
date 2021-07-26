@@ -52,7 +52,7 @@ export default {
           list = _res.items;
         },
         error(xhr, errType, err) {
-          layer.msg("哎呀，");
+          layer.msg("哎呀");
         },
       });
       list.forEach((item) => {
@@ -65,23 +65,22 @@ export default {
     async getHotSongList() {
       var option = {
         sin: this.sin,
-        ein: this.ein
-      }
+        ein: this.ein,
+      };
       if (this.lasttime) {
-        option.lasttime = this.lasttime
+        option.lasttime = this.lasttime;
       }
 
-      var { code, data } = await this.__getJson(this.__SONG_SHEET_LIST, option)
-       
-      let list = data.list
-      list.forEach(item => {
-         
-        item.id = item.dissid
-      })
+      var { code, data } = await this.__getJson(this.__SONG_SHEET_LIST, option);
+
+      let list = data.list;
+      list.forEach((item) => {
+        item.id = item.dissid;
+      });
       if (code == this.__QERR_OK) {
-        this.hotSongList.push(...list)
-        this.sin += 10
-        this.ein += 10
+        this.hotSongList.push(...list);
+        this.sin += 10;
+        this.ein += 10;
       }
     },
 

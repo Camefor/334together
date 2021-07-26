@@ -991,7 +991,7 @@ export default {
     //发起分享链接后再调用这个
     //另一可调用情况是 进入页面 url参数中已经存在有效的roomId 和 invalid
     initSignalR() {
-      console.log("开始接收服务端发来的指令");
+      console.log("initSignalR");
       //signalR接收Serve端的数据
       var _this = this;
       // _this.signalr.off("SignalRSendForSongPlayIndex");
