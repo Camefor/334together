@@ -35,7 +35,6 @@ import vueTap from 'v-tap'
 import './common/mixins/global.js'
 import signalr from './common/js/signalR.js'
 import VueClipboard from 'vue-clipboard2'
-
 Vue.use(VueClipboard)
 
 Vue.use(layer)

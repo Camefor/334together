@@ -149,7 +149,7 @@
             </p>
 
             <div v-show="isShowCopy" class="copyBox">
-              <el-button
+              <p
                 class="ml10"
                 type="text"
                 size="medium"
@@ -158,7 +158,7 @@
                 v-clipboard:error="onError"
               >
                 复制链接
-              </el-button>
+              </p>
             </div>
             <p v-show="isShowListen" @click="listenTogether">
               {{ ListenTogetherState }}
@@ -1204,7 +1204,7 @@ export default {
 
     onCopy(e) {
       var _this = this;
-      layer.msg("复制成功，去分享吧~");
+      layer.msg("去分享吧~");
 
       // layer.confirm(
       //   "复制成功，去发给你想发的人吧",
