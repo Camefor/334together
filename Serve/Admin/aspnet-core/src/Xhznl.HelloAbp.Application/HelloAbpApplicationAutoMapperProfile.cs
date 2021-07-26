@@ -73,6 +73,7 @@ namespace Xhznl.HelloAbp
             //                 ;
             //获取 SongSheet 歌单时使用
             CreateMap<SongSheet, SongSheetDto>();
+            CreateMap<Song, SongDto>();
 
 
             //CreateMap<SongSheet, SongSheetDto>()

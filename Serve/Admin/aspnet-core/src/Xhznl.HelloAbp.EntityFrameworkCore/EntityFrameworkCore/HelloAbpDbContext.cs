@@ -27,6 +27,8 @@ namespace Xhznl.HelloAbp.EntityFrameworkCore
         public DbSet<SongSheet> SongSheets { get; set; }
 
 
+        public DbSet<Song> Songs { get; set; }
+
         /* Add DbSet properties for your Aggregate Roots / Entities here.
          * Also map them inside HelloAbpDbContextModelCreatingExtensions.ConfigureHelloAbp
          */

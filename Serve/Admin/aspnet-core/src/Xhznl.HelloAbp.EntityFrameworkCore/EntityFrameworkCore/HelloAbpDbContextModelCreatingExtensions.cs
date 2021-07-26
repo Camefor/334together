@@ -29,6 +29,14 @@ namespace Xhznl.HelloAbp.EntityFrameworkCore
                 b.ConfigureByConvention(); //auto configure for the base class props
                 b.Property(x => x.Dissid).IsRequired().HasMaxLength(128);
             });
+
+            builder.Entity<Song>(b =>
+           {
+               b.ToTable(HelloAbpConsts.DbTablePrefix + "Songs",
+                   HelloAbpConsts.DbSchema);
+               b.ConfigureByConvention(); //auto configure for the base class props
+               b.Property(x => x.SongId).IsRequired().HasMaxLength(128);
+           });
         }
     }
 }

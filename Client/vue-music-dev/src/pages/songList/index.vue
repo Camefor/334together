@@ -72,7 +72,8 @@ export default {
   created() {
     var _this = this;
     this.cd = {};
-    this.getSongList();
+    // this.getSongList();
+    this.getMySongList();
   },
   mounted() {
     this.reserved = $(".mt-header").height();
@@ -132,7 +133,7 @@ export default {
       if (this.musicList.length >= this.total_song_num) {
       }
 
-      this.getSongList();
+      // this.getSongList();
     },
     initCd(cd) {
       this.$set(this.cd, "dissname", cd.dissname);
@@ -141,6 +142,29 @@ export default {
     getMusicList(list) {
       $.each(list, (key, item) => {
         this.musicList.push(new this.__Song(item));
+      });
+    },
+    getMySongList() {
+      let list = [];
+      $.ajax({
+        url: `http://localhost:44370/api/app/song`,
+        dataType: "json",
+        method: "get",
+        async: false,
+        success(_res) {
+          list = _res.items;
+        },
+        error(xhr, errType, err) {
+          layer.msg("哎呀");
+        },
+      });
+      this.loading = false;
+      // this.musicList = list.map((item) => {
+      //   return new this.__Song(item);
+      // });
+      let testData = [...list];
+       this.musicList = testData.map((item) => {
+        return new this.__Song(item);
       });
     },
 
