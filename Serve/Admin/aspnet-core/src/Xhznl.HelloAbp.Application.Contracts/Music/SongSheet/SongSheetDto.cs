@@ -12,6 +12,9 @@ namespace Xhznl.HelloAbp.Music
     /// </summary>
     public class SongSheetDto : AuditedEntityDto<Guid>
     {
+        /// <summary>
+        /// 和Song 的  AlbumId 关联
+        /// </summary>
         public string Dissid { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime CommitTime { get; set; }

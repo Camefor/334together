@@ -18,10 +18,25 @@ namespace Xhznl.HelloAbp.Music
       ISongAppService //implement the IBookAppService
     {
 
+
+        private readonly IRepository<Song, Guid> _songRepository;
+
+
         public SongAppService(IRepository<Song, Guid> repository)
          : base(repository)
         {
+            _songRepository = repository;
         }
+
+        public async Task<IEnumerable<SongDto>> GetSongsById(string albumId)
+        {
+            //GetListAsync(new INp)
+            var list = await GetListAsync(new PagedAndSortedResultRequestDto());
+            var res = list.Items.ToList().Where(c => c.AlbumId == albumId);
+            return res;
+        }
+
+
 
         public async override Task<PagedResultDto<SongDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {

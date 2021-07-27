@@ -145,25 +145,24 @@ export default {
       });
     },
     getMySongList() {
+      var songsheetId = this.$route.query.id;
+      var _url = `http://localhost:44370/api/app/song/songsById/` + songsheetId;
       let list = [];
       $.ajax({
-        url: `http://localhost:44370/api/app/song`,
+        url: _url,
         dataType: "json",
         method: "get",
         async: false,
         success(_res) {
-          list = _res.items;
+          list = _res;
         },
         error(xhr, errType, err) {
           layer.msg("哎呀");
         },
       });
       this.loading = false;
-      // this.musicList = list.map((item) => {
-      //   return new this.__Song(item);
-      // });
       let testData = [...list];
-       this.musicList = testData.map((item) => {
+      this.musicList = testData.map((item) => {
         return new this.__Song(item);
       });
     },

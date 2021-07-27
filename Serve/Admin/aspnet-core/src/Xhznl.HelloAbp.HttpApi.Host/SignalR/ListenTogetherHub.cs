@@ -77,6 +77,10 @@ namespace Xhznl.HelloAbp.SignalR
         {
             var requestParameter = ajsonParameter.ToObject<ListenTogetherDto>();
             var data = GetRoomData(requestParameter.RoomId);
+            if (data == null)
+            {
+                return;
+            }
             var connectedIds = data.Item1;
             connectedIds.Remove(requestParameter.connectionId);//不给自己发
             var response = CreateResponseToClient(requestParameter);
@@ -108,6 +112,10 @@ namespace Xhznl.HelloAbp.SignalR
         private Tuple<List<string>, List<OnlineUser>> GetRoomData(string aroomId)
         {
             var onlineRoomsInCache = _cacheOnlineRoom.Get(CacheKeyCollection._cacheKey_online_room);
+            if (onlineRoomsInCache == null)
+            {
+                return null;
+            }
             var targetRoom = onlineRoomsInCache.Where(c => c.RoomId == aroomId).FirstOrDefault();
             var connectedIds = targetRoom.OnlineUsers.Select(_ => _.ConnectedId).ToList();
             var response = targetRoom.OnlineUsers;

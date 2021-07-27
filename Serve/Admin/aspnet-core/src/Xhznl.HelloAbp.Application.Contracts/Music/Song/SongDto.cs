@@ -11,14 +11,16 @@ namespace Xhznl.HelloAbp.Music
         public int SongId { get; set; }
         public string SongmId { get; set; }
         public string AlbummId { get; set; }
-        public string AlbumId { get; set; }
 
+        /// <summary>
+        /// 和SongSheet 的  Dissid 关联
+        /// </summary>
+        public string AlbumId { get; set; }
 
         /// <summary>
         /// 音频文件地址
         /// </summary>
         public string Url { get; set; }
-
 
         /// <summary>
         /// 歌曲名称
