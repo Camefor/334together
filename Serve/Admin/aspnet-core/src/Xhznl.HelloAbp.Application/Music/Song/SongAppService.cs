@@ -32,7 +32,7 @@ namespace Xhznl.HelloAbp.Music
         {
             //GetListAsync(new INp)
             var list = await GetListAsync(new PagedAndSortedResultRequestDto());
-            var res = list.Items.ToList().Where(c => c.AlbumId == albumId);
+            var res = list.Items.ToList().Where(c => c.albumid == albumId);
             return res;
         }
 

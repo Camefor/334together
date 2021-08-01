@@ -7,7 +7,7 @@ namespace Xhznl.HelloAbp.Music
 {
     public class Song : AuditedAggregateRoot<Guid>
     {
-    
+
 
         public string Purl { get; set; }
         public int SongId { get; set; }
@@ -29,6 +29,10 @@ namespace Xhznl.HelloAbp.Music
         /// </summary>
         public string Url { get; set; }
 
+        /// <summary>
+        /// 歌词文件
+        /// </summary>
+        public string LyricUrl { get; set; }
 
         /// <summary>
         /// 歌曲名称

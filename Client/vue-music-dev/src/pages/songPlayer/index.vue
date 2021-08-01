@@ -415,8 +415,6 @@ export default {
       newHeight == 0 && this.lyricStop();
     },
     async currentSong(newSong, oldSong) {
-      // debugger;
-
       if (this.__isEmptyObject(newSong)) {
         this.audio.src = "";
         return;
@@ -433,7 +431,8 @@ export default {
       this.currentLyric && this.currentLyric.stop();
       this.currentLyric = null;
       // 获取歌词
-      this.getLyric();
+      // this.getLyric();
+      this.getMySongLyric();
       // 重置
       this.resetStart();
 
@@ -820,56 +819,26 @@ export default {
       this.currentLyric && this.currentLyric.seek(this.currentTime * 1000);
       this.draging && this.lyricStop();
     },
+
+    getMySongLyric() {
+      var lyric = this.currentSong.albummid;
+      this.currentLyric = new lyricParser(lyric, this.handleLyric);
+      if (this.currentLyric.lines.length > 0) {
+        this.curLyric = this.currentLyric.lines[this.curLine].txt;
+        this.songReady && this.currentLyric.play();
+      } else if (lyric.split("\n").length > 2) {
+        this.currentLyric.lines = lyric.split("\n").map((txt) => ({ txt }));
+        this.$nextTick(() => {
+          this.lyricStop();
+          this.curLine = -1;
+        });
+      }
+    },
     async getLyric() {
       var lyric = "",
         param = { id: this.currentSong.id };
       lyric = await this.currentSong.getLyric();
-      if (this.currentSong.id == 666) {
-        lyric = `[ti: 天空之城]
-[ar: 李志]
-[al: 我爱南京]
-[01: 590.000]
-
-作词：李志
-作曲：李志
-
-[00:02.000] 飞机飞过天空，天空之城
-[00:09.000] 落雨下的黄昏的我们
-[00:16.000] 此刻我在回忆的夜里
-[00:25.000] 感觉着你忽明忽暗
-
-[00:31.000] 我想回到过去，沉默著欢喜
-[00:40.000] 天空之城在哭泣越来越明亮的你
-[00:46.000] 爱情不过是生活的屁
-[00:53.000] 折磨着我也折磨着你
-
-[00:59.000] 港岛妹妹，你献给我的西班牙馅饼
-[01:07.000] 甜蜜地融化了我，天空之城在哭泣
-[01:14.000] 港岛妹妹，我们曾拥有的甜蜜的爱情
-[01:23.000] 疯狂地撕裂了我，天空之城在哭泣
-
-[01:59.000] 港岛妹妹，你献给我的西班牙馅饼
-[02:06.000] 甜蜜地融化了我，天空之城在哭泣
-[02:13.000] 港岛妹妹，我们曾拥有的甜蜜的爱情
-[02:22.000] 疯狂地撕裂了我，天空之城在哭泣
-
-[02:28.000] 港岛妹妹，你献给我的西班牙馅饼
-[02:36.000] 甜蜜地融化了我，天空之城在哭泣
-[02:42.000] 港岛妹妹，我们曾拥有的甜蜜的爱情
-[02:50.000] 疯狂地撕裂了我，天空之城在哭泣
-
-[03:03.000] 有人路过那里，回来告诉我
-[03:10.000] 天空之城在哭泣无法呼吸的你
-[03:18.000] 此刻我在异乡的夜里
-[03:25.000] 想念着你越来越远
-[03:35.000] 歌词制作by小镇的青年
-`;
-      } else {
-        lyric = "";
-      }
-
       this.currentLyric = new lyricParser(lyric, this.handleLyric);
-
       if (this.currentLyric.lines.length > 0) {
         this.curLyric = this.currentLyric.lines[this.curLine].txt;
         this.songReady && this.currentLyric.play();
