@@ -44,7 +44,7 @@ export default {
     getMySongSheet() {
       let list = [];
       $.ajax({
-        url: `http://localhost:44370/api/app/songSheet`,
+        url: `http://140.82.13.152:8888/api/app/songSheet`,
         dataType: "json",
         method: "get",
         async: false,

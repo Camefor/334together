@@ -146,7 +146,7 @@ export default {
     },
     getMySongList() {
       var songsheetId = this.$route.query.id;
-      var _url = `http://localhost:44370/api/app/song/songsById/` + songsheetId;
+      var _url = `http://140.82.13.152:8888/api/app/song/songsById/` + songsheetId;
       let list = [];
       $.ajax({
         url: _url,

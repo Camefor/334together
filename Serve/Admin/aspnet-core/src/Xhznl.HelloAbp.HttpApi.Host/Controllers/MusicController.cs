@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,22 @@ namespace Xhznl.HelloAbp.Controllers
         {
             _cache = cache;
         }
+
+//        public IActionResult CreateLink()
+//        {
+//            var client = new RestClient("https://www.helingqi.com/url.php");
+//            var request = new RestRequest(Method.POST);
+//            //request.AddHeader("postman-token", "71821cd8-d83f-5003-28dc-8f6c6094cb08");
+//            request.AddHeader("cache-control", "no-cache");
+//            request.AddHeader("content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
+//            request.AddParameter("multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
+//@$"------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=
+
+//\"url\"\r\n\r\nhttp://www.camefor.top/songList?dissid=111&createTime=2020-10-18T00%3A00%3A00&commitTime=2020-10-18T00%3A00%3A00&dissName=%E8%A2%AB%E7%A6%81%E5%BF%8C%E7%9A%84%E6%B8%B8%E6%88%8F%282004%29&imgUrl=https%3A%2F%2F2019334.xyz%2Fshare%2Fcover%2F1.jpg&introduction=&listenNum=2783074&score=0&version=0&creator=%5Bobject+Object%5D&lastModificationTime=&lastModifierId=&creationTime=2021-07-03T01%3A14%3A15.2375798&creatorId=&id=111&roomId=dafd58bd-e66&inviteId=17c4417c-0db\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data;" +
+//"    name=\"type\"\r\n\r\ndwz\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--", ParameterType.RequestBody);
+//            IRestResponse response = client.Execute(request);
+//        }
+
 
         /// <summary>
         /// 发起一起听请求

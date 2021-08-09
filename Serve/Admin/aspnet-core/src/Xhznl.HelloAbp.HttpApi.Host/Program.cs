@@ -6,6 +6,15 @@ using Serilog.Events;
 
 namespace Xhznl.HelloAbp
 {
+    //部署：
+    // nohup dotnet Xhznl.HelloAbp.HttpApi.Host.dll --urls="http://*:8888"
+    //nohup dotnet Xhznl.HelloAbp.HttpApi.Host.dll --urls="http://*:8081;http://*:8082" --environment=Delopment > /dev/null 2>&1 &
+
+    /**
+     * 
+#查看相关进行
+ps -aux | grep "Xhznl.HelloAbp.HttpApi.Host.dll"
+     * **/
     public class Program
     {
         public static int Main(string[] args)

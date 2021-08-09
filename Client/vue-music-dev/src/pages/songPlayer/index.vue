@@ -1108,7 +1108,7 @@ export default {
         return false;
       }
 
-      var url = "http://localhost:44370/music/createRoom";
+      var url = "http://140.82.13.152:8888/music/createRoom";
       var param = {
         ConnectedId: _this.signalr.connectionId,
         UserAgent: "hahhh",
@@ -1198,7 +1198,7 @@ export default {
 
     acceptListen() {
       var _this = this;
-      var url = "http://localhost:44370/music/acceptListen";
+      var url = "http://140.82.13.152:8888/music/acceptListen";
       var r = sessionStorage.getItem("roomId");
       var i = sessionStorage.getItem("inviteId");
       console.log(_this.signalr);

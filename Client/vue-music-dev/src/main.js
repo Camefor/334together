@@ -75,3 +75,52 @@ new Vue({
   template: '<App/>',
   components: { App },
 })
+
+
+/* 
+
+部署：
+cd /etc/nginx/
+
+vim nginx.conf
+
+
+
+server {
+ listen 80;
+ server_name ip; 140.82.13.152
+
+ # 注意设定 root路径是有dist的
+ location / {
+   root /usr/local/webapp/dist;
+   index /index.html;
+ }
+
+ #跨域 ip和port自行替换
+ location /adminApi {
+   proxy_pass http://ip:port;
+ }
+
+}
+
+
+
+  server {
+        listen       80;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root  /var/334musicvue;
+            index  index.html;
+        }
+
+    }
+
+
+    重新加载配置： nginx -s reload
+
+*/

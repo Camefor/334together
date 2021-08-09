@@ -5,7 +5,7 @@ import $ from "zepto";
 
 //服务器地址
 const signal = new signalR.HubConnectionBuilder()
-    .withUrl('http://localhost:44370/hubs/listenTogether', {})
+    .withUrl('http://140.82.13.152:8888/hubs/listenTogether', {})
     .configureLogging(signalR.LogLevel.Information)
     .build()
 
@@ -19,7 +19,7 @@ const signalr = function () {
 
 function acceptListen() {
     var _this = this;
-    var url = "http://localhost:44370/music/acceptListen";
+    var url = "http://140.82.13.152:8888/music/acceptListen";
     var r = sessionStorage.getItem("roomId");
     var i = sessionStorage.getItem("inviteId");
     console.log(_this.signalr);
@@ -57,7 +57,7 @@ async function start() {
         var inviteId = getUrlKey("inviteId", window.location.href);
         if (!!roomId) {
             console.log(roomId);
-            var url = "http://localhost:44370/music/acceptListen";
+            var url = "http://140.82.13.152:8888/music/acceptListen";
             var param = {
                 ConnectedId: signal.connectionId,
                 UserAgent: "hahhh",
