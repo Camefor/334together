@@ -41,6 +41,7 @@ export default {
   },
   methods: {
     list(item) {
+      //路由传参
       return {
         name: 'songList',
         query: { ...item, pic: item.imgurl }

@@ -35,16 +35,20 @@ export default {
     this.getMySongSheet();
   },
   activated() {
-    this.$refs.scroll && this.$refs.scroll.refresh();
+    // this.$refs.scroll && this.$refs.scroll.refresh();
+          this.loading = false;
+
   },
   methods: {
     onPullingUp() {
       // this.getHotSongList();
+            this.loading = false;
+
     },
     getMySongSheet() {
       let list = [];
       $.ajax({
-        url: `http://140.82.13.152:8888/api/app/songSheet`,
+        url: `http://140.82.13.152:8888/api/app/songSheet?Sorting=version&SkipCount=0&MaxResultCount=50`,
         dataType: "json",
         method: "get",
         async: false,

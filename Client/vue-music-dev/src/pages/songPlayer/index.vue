@@ -822,16 +822,20 @@ export default {
 
     getMySongLyric() {
       var lyric = this.currentSong.albummid;
-      this.currentLyric = new lyricParser(lyric, this.handleLyric);
-      if (this.currentLyric.lines.length > 0) {
-        this.curLyric = this.currentLyric.lines[this.curLine].txt;
-        this.songReady && this.currentLyric.play();
-      } else if (lyric.split("\n").length > 2) {
-        this.currentLyric.lines = lyric.split("\n").map((txt) => ({ txt }));
-        this.$nextTick(() => {
-          this.lyricStop();
-          this.curLine = -1;
-        });
+      if (lyric.length >= 20) {
+        this.currentLyric = new lyricParser(lyric, this.handleLyric);
+        if (this.currentLyric.lines.length > 0) {
+          this.curLyric = this.currentLyric.lines[this.curLine].txt;
+          this.songReady && this.currentLyric.play();
+        } else if (lyric.split("\n").length > 2) {
+          this.currentLyric.lines = lyric.split("\n").map((txt) => ({ txt }));
+          this.$nextTick(() => {
+            this.lyricStop();
+            this.curLine = -1;
+          });
+        }
+      } else {
+        this.curLyric = "";
       }
     },
     async getLyric() {
