@@ -114,6 +114,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/songSheet',
+    component: Layout,
+    children: [
+      {
+        path: 'songSheet',
+        component: () => import('@/views/songSheet/index'),
+        name: 'test',
+        meta: { title: '歌单', icon: 'example', affix: true }
+      }
+    ]
+  },
+  {
     path: '/guide',
     component: Layout,
     redirect: '/guide/index',
